@@ -21,7 +21,7 @@
   "dependencies": {
     "config": "^3.3.3",
     "express": "^4.17.1",
-    "hbs": "^4.1.1",
+    "express-handlebars": "^5.2.1",
     "mongoose": "^5.11.16"
   },
   "devDependencies": {

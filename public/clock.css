@@ -10,6 +10,22 @@ html {
   width: 100%;
   height: 100%;
 }
+.m1 {
+  margin: 1rem;
+}
+.m2 {
+  margin: 2rem;
+}
+.p1 {
+  padding: 1rem;
+}
+.p2 {
+  padding: 2rem;
+}
+.txt-center {
+  text-align: center;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -20,16 +36,29 @@ html {
   position: relative;
   top: 25vh;
 }
+.info {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #fefefe;
+  border: 1px solid rgb(189, 189, 189);
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+}
 
+.info weather div {
+  font-size: 1rem;
+}
+
+.clock {
+  font-size: 1.5rem;
+}
 .dp-none {
   display: none;
 }
 
 .show {
   display: block;
-}
-.clock {
-  font-size: 30px;
 }
 .nameForm input,
 .todoForm input {
