@@ -8,6 +8,9 @@ const layoutPath = path.join(__dirname, './views/layouts');
 const partialsPath = path.join(__dirname, './views/partials');
 const publicPath = path.join(__dirname, './public');
 
+const db = require('./server/db');
+console.log(db);
+
 app.set('view engine', 'hbs');
 app.engine(
   'hbs',
@@ -20,11 +23,10 @@ app.engine(
 );
 
 app.use(express.static(publicPath));
+app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.render('index', {
-    js: ['getTime'],
-  });
+  res.render('index');
 });
 
 app.listen(PORT, () => {
