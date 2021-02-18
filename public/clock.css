@@ -4,11 +4,22 @@
   box-sizing: border-box;
   outline: none;
   list-style: none;
+  font-family: 'Nunito', sans-serif;
 }
 body,
 html {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
+}
+:root {
+  --main-color: rgb(206, 91, 125);
+  --main-color2: rgb(124, 190, 228);
+  --reverse-color: rgb(151, 151, 151);
+  --font-color: #fefefe;
+  --border-color: rgb(189, 189, 189);
+}
+section {
+  height: 100vh;
 }
 .m1 {
   margin: 1rem;
@@ -25,27 +36,36 @@ html {
 .txt-center {
   text-align: center;
 }
-
-.container {
+.flex-col {
   display: flex;
   flex-direction: column;
+}
+
+.container {
   justify-content: center;
   align-items: center;
-  color: rgb(214, 214, 214);
+  color: var(--font-color);
   font-size: 30px;
-  position: relative;
-  top: 25vh;
+  width: 50vw;
+  margin: auto;
+  height: 100%;
 }
-.info {
+.left-side {
   position: absolute;
   top: 0;
   left: 0;
-  color: #fefefe;
-  border: 1px solid rgb(189, 189, 189);
+  color: var(--font-color);
+  width: 16vw;
+}
+.left-side > div {
+  width: 100%;
+}
+.info {
+  border: 2px solid var(--border-color);
   border-radius: 5px;
   padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
 }
-
 .info weather div {
   font-size: 1rem;
 }
@@ -65,16 +85,15 @@ html {
   width: 20vw;
   height: 30px;
   padding: 5px;
-  border: 2px solid white;
+  border: 2px solid var(--border-color);
   border-radius: 5px;
 }
 .nameForm input:focus,
 .todoForm input:focus {
-  border-color: rgb(151, 151, 151);
+  border-color: var(--border-color);
 }
 .greeting {
-  padding: 10px 0;
-  font-size: 20px;
+  font-size: 1.5rem;
 }
 .todoList {
   font-size: 1.5rem;
@@ -82,17 +101,17 @@ html {
   text-align: center;
 }
 .todoList li {
-  background: rgb(151, 151, 151);
-  color: white;
+  background: var(--reverse-color);
+  color: var(--font-color);
   border-radius: 5px;
   margin: 0.5rem 0;
   position: relative;
-  border: 2px solid white;
+  border: 2px solid var(--border-color);
 }
 .todoList i {
   padding: 4px 6px;
-  background: rgb(167, 59, 122);
-  color: white;
+  background: var(--main-color);
+  color: var(--font-color);
   border-radius: 3px;
   cursor: pointer;
   margin-left: 1rem;
@@ -100,11 +119,38 @@ html {
   right: 0;
 }
 
+.right-side {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: var(--font-color);
+  width: 16vw;
+}
+.right-side:nth-child(1),
+.links:nth-child(1) {
+  background: var(--main-color2);
+}
+.right-side > div,
+.links > a {
+  border: 2px solid var(--border-color);
+  border-radius: 5px;
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.right-side > div:hover,
+.links > a:hover {
+  background: var(--main-color);
+}
+.selected {
+  background: var(--main-color);
+}
 .btn_user {
-  font-size: 15px;
-  background-color: rgb(167, 59, 122);
-  color: white;
-  border: white solid 1.5px;
+  font-size: 18px;
+  color: var(--font-color);
+  border: solid 2px var(--border-color);
   border-radius: 5px;
   position: absolute;
   right: 10px;
@@ -114,7 +160,7 @@ html {
   transition: background-color 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .btn_user:hover {
-  background-color: rgb(46, 88, 53);
+  background-color: var(--main-color);
 }
 .bgImage {
   position: absolute;
