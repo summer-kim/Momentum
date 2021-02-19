@@ -24,17 +24,16 @@ app.engine(
 
 app.use(express.static(publicPath));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 app.use('/user', userRouter.routes);
 app.use('/auth', authRouter.routes);
 
 app.get('/', (req, res) => {
   res.render('login', {
     style: 'login',
+    isRegister: true,
   });
-});
-
-app.get('/home', (req, res) => {
-  res.render('index');
 });
 
 app.listen(PORT, () => {

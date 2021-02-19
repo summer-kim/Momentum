@@ -1,18 +1,19 @@
 <section class="login">
     <h1 class="large text-primary">Sign In</h1>
     <p class="lead"><i class="fas fa-user"></i> Sign into Your Account</p>
-    <form class="login-form" >
+    <form class="login-form" action="/auth/login" method="POST">
         <input
             type="email"
             placeholder="Email Address"
             name="email"
-            required
+            required=""
         />
       
         <input
             type="password"
             placeholder="Password"
             name="password"
+            required=""
         />
         <input type="submit" class="login-btn" value="Login" />
     </form>
@@ -20,4 +21,3 @@
         Don't have an account? <a href="#" class="large link">Sign Up</a>
     </p>
 </section>
-<script src="/js/loginHandler.js"></script>
