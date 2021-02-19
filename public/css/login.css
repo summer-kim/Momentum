@@ -18,11 +18,10 @@
 .text-primary {
   text-align: center;
 }
-.login .login-form,
-.login .login-form .form-group {
+.login .login-form {
   width: 100%;
 }
-.form-group input {
+.login-form input {
   width: 100%;
   height: 2rem;
   margin: 5px 0;

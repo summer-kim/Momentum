@@ -22,9 +22,6 @@ html {
 section {
   height: 100vh;
 }
-a {
-  color: var(--main-color);
-}
 .m1 {
   margin: 1rem;
 }
