@@ -9,6 +9,7 @@ const partialsPath = path.join(__dirname, './views/partials');
 const publicPath = path.join(__dirname, './public');
 
 const userRouter = require('./server/routes/userRouter');
+const authRouter = require('./server/routes/authRouter');
 
 app.set('view engine', 'hbs');
 app.engine(
@@ -23,7 +24,8 @@ app.engine(
 
 app.use(express.static(publicPath));
 app.use(express.json());
-app.use('/api', userRouter.routes);
+app.use('/user', userRouter.routes);
+app.use('/auth', authRouter.routes);
 
 app.get('/', (req, res) => {
   res.render('login', {
