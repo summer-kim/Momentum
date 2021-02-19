@@ -3,4 +3,7 @@ const config = require('config');
 const firebaseConfig = config.get('firebaseConfig');
 firebase.initializeApp(firebaseConfig);
 
-module.exports = firebase;
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+module.exports = { auth, db };
