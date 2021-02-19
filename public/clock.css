@@ -5,6 +5,7 @@
   outline: none;
   list-style: none;
   font-family: 'Nunito', sans-serif;
+  text-decoration: none;
 }
 body,
 html {
@@ -20,6 +21,9 @@ html {
 }
 section {
   height: 100vh;
+}
+a {
+  color: var(--main-color);
 }
 .m1 {
   margin: 1rem;

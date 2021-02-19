@@ -26,6 +26,12 @@ app.use(express.json());
 app.use('/api', userRouter.routes);
 
 app.get('/', (req, res) => {
+  res.render('login', {
+    style: 'login',
+  });
+});
+
+app.get('/home', (req, res) => {
   res.render('index');
 });
 
