@@ -5,6 +5,7 @@
 
   <body>
 
+    {{#if msg}}<div class="err">{{msg}}</div>{{/if}}
     {{{body}}}
     
     
@@ -13,4 +14,13 @@
     <script src="./js/getImage.js"></script>
     
   </body>
+  <script>
+    const errMsg = document.querySelector('.err')
+    const lifter = (time) =>{
+      if(errMsg){
+      setTimeout(()=> errMsg.style.transform = 'translateY(-50px)', time)
+      }
+    }
+    lifter(4500)
+  </script>
 </html>

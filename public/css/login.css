@@ -4,7 +4,7 @@
   margin: auto;
   padding: 0.5rem 1rem;
   width: 30vw;
-  height: 40vh;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
