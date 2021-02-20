@@ -1,6 +1,4 @@
-const clock = document.querySelector('.clock').childNodes[1];
-
-const getTime = () => {
+const getTime = (clock) => {
   const time = new Date();
   const hour = time.getHours();
   const minute = time.getMinutes();
@@ -9,5 +7,3 @@ const getTime = () => {
     minute < 10 ? '0' + minute : minute
   }:${second < 10 ? '0' + second : second}`;
 };
-
-setInterval(getTime, 1000);

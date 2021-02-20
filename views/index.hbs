@@ -35,12 +35,13 @@
     <button type="submit" class="logout-btn">Logout</button>
   </form>
 </section>
+    <script src="./js/getTime.js"></script>
 <script>
+  //element
   const info = document.querySelector('.info')
   const infoTxt = document.querySelector('.info-txt')
   const infoEmoji = document.querySelector('.emoji-plus')
   const placeForm = document.querySelector('.place-form')
-
 
   const onClickInfo = (e) =>{
     infoTxt.classList.add('dp-none')
@@ -54,8 +55,25 @@
     const input = document.querySelector('.placeInput').value
     const res = await fetch('/user/city?city=' + input)
     const data = await res.json()
-    console.log(data)
+    const {weather, temp , humidity, location} = data
 
+    placeForm.classList.add('dp-none')
+    
+   const clockHtml = `
+      <div class="clock">
+        <h1></h1>
+      </div>
+    `
+    const weatherHtml = `
+      <div class="weather">
+        <div>${weather}, ${temp}&#8451,${humidity}</div>
+        <div>at ${location}</div>
+      </div>
+    `
+    info.innerHTML = clockHtml + weatherHtml
+
+    const clock = document.querySelector('.clock').childNodes[1];
+    setInterval(()=>getTime(clock), 1000)
   }
 
   info.addEventListener('click', onClickInfo)
