@@ -148,19 +148,23 @@ section {
 .selected {
   background: var(--main-color);
 }
-.btn_user {
+.logout {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: 0.5rem;
+}
+.logout-btn {
+  padding: 0.5rem 1rem;
   font-size: 18px;
-  color: var(--font-color);
+  background: transparent;
   border: solid 2px var(--border-color);
   border-radius: 5px;
-  position: absolute;
-  right: 10px;
-  padding: 10px 15px;
-  bottom: 10px;
   cursor: pointer;
+  color: var(--font-color);
   transition: background-color 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.btn_user:hover {
+.logout-btn:hover {
   background-color: var(--main-color);
 }
 .bgImage {

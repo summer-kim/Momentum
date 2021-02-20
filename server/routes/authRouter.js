@@ -23,6 +23,15 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.get('/login/logout', async (req, res) => {
+  try {
+    await auth.signOut();
+    res.redirect('/login');
+  } catch (err) {
+    res.status(400).json({ msg: err.message });
+  }
+});
+
 router.get('/register', (req, res) => {
   res.render('register', {
     style: 'login',
@@ -38,9 +47,7 @@ router.post('/register', async (req, res) => {
         await user.updateProfile({
           displayName: userName,
         });
-        return res.redirect('/login');
-      } else {
-        return res.redirect('/register');
+        return res.redirect('/');
       }
     });
   } catch (err) {
@@ -50,4 +57,5 @@ router.post('/register', async (req, res) => {
     });
   }
 });
+
 module.exports = { routes: router };
