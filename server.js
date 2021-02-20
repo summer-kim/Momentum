@@ -33,7 +33,7 @@ const checkAuth = require('./server/middleware');
 
 app.get('/', checkAuth, (req, res) => {
   res.render('index', {
-    style: '/css/index.css',
+    userName: req.user.displayName,
   });
 });
 
