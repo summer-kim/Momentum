@@ -1,13 +1,12 @@
 <section>
   <div class="left-side m1">
     <div class="info txt-center">
-      <div class="clock">
-        <h1>00:00:00</h1>
-      </div>
-      <div class="weather">
-        <div>Sunny, 6&#8451, 25%</div>
-        <div>at Seoul</div>
-      </div>
+      <i class="fas fa-plus emoji-plus "></i>
+      <div class="info-txt "> Get Time <br/>&amp;Weather</div>
+      <form class="place-form dp-none">
+        <input class="placeInput" type="text" placeholder="Name of City" name="city" required=""/>
+        <button type="submit">submit</button>
+      </form>
     </div>
     <div class="links flex-col">
       <a class="folder-title"><i class="fas fa-link"></i> My Links</a>
@@ -36,3 +35,29 @@
     <button type="submit" class="logout-btn">Logout</button>
   </form>
 </section>
+<script>
+  const info = document.querySelector('.info')
+  const infoTxt = document.querySelector('.info-txt')
+  const infoEmoji = document.querySelector('.emoji-plus')
+  const placeForm = document.querySelector('.place-form')
+
+
+  const onClickInfo = (e) =>{
+    infoTxt.classList.add('dp-none')
+    infoEmoji.classList.add('dp-none')
+    placeForm.classList.remove('dp-none')
+  }
+
+  const onSubmit = async(e) =>{
+    e.preventDefault();
+    
+    const input = document.querySelector('.placeInput').value
+    const res = await fetch('/user/city?city=' + input)
+    const data = await res.json()
+    console.log(data)
+
+  }
+
+  info.addEventListener('click', onClickInfo)
+  placeForm.addEventListener('submit', onSubmit)
+</script>

@@ -66,16 +66,32 @@ section {
   border-radius: 5px;
   padding: 0.5rem 1rem;
   margin-bottom: 1rem;
+  transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+  cursor: pointer;
+}
+.info:hover {
+  background: var(--main-color);
 }
 .info weather div {
   font-size: 1rem;
 }
-
+.info .emoji-plus {
+  display: inline-block;
+  padding: 5px;
+  width: auto;
+  border: 3px solid var(--font-color);
+  border-radius: 50%;
+  margin: 0.5rem;
+}
+.info-txt {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
 .clock {
   font-size: 1.5rem;
 }
 .dp-none {
-  display: none;
+  display: none !important;
 }
 
 .show {
