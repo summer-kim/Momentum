@@ -41,7 +41,6 @@ section {
   display: flex;
   flex-direction: column;
 }
-
 .container {
   justify-content: center;
   align-items: center;
@@ -62,12 +61,17 @@ section {
   width: 100%;
 }
 .info {
+  height: 120px;
   border: 2px solid var(--border-color);
   border-radius: 5px;
   padding: 0.5rem 1rem;
   margin-bottom: 1rem;
   transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
   cursor: pointer;
+}
+.info h1 {
+  position: relative;
+  top: 30%;
 }
 .info:hover {
   background: var(--main-color);
@@ -86,6 +90,20 @@ section {
 .info-txt {
   font-size: 1.5rem;
   font-weight: 600;
+}
+.change-btn {
+  position: absolute;
+  background: var(--main-color);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: inherit;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
 }
 .clock {
   font-size: 1rem;

@@ -6,6 +6,8 @@
         <button type="submit">Submit</button>
     </form>
 </div>
+
+
 <script src="./js/getTime.js"></script>
 <script type="module">
   import { setWeather, getWeather } from './js/getData.js' 
@@ -16,6 +18,9 @@
   const infoEmoji = document.querySelector('.emoji-plus')
   const placeForm = document.querySelector('.place-form')
 
+  let weather, temp, humidity, city  = ''
+  //variables to display weather
+
   const onClickInfo = (e) =>{
     infoTxt.classList.add('dp-none')
     infoEmoji.classList.add('dp-none')
@@ -25,9 +30,10 @@
   const init = async() =>{
     try{
       const cityData = await getWeather()
-      console.log(cityData)
       if(cityData){
-        displayWeather(cityData.city)
+        getWeatherAPI(cityData.city)
+        info.addEventListener('mouseover', hover)
+        info.addEventListener('mouseout', hoverOut)
       }else{
         info.addEventListener('click', onClickInfo)
         placeForm.addEventListener('submit', onSubmit)
@@ -36,15 +42,24 @@
       console.log(err)
     }
   }
+  const hover = (e) =>{
+    const div = document.createElement('div')
+    div.innerText = 'Change'
+    div.classList.add('change-btn')
+    info.append(div)
+  }
+  const hoverOut = (e) =>{
+    info.lastElementChild.classList.add('dp-none')
+  }
 
   const onSubmit = (e) =>{
     e.preventDefault();
     let input = document.querySelector('.placeInput').value
-    displayWeather(input)
+    getWeatherAPI(input)
     input = ''
   }
 
-  const displayWeather = async(value) =>{
+  const getWeatherAPI = async(value) =>{
     const url =
     'http://api.weatherstack.com/current?access_key=bd459e9c00f721c07d47a7debfbbe4ff&query=$' +
     value;
@@ -66,7 +81,19 @@
           };
 
       setWeather(value) //set City of User Data in firestore.
-      const { weather , temp , humidity , city } = data
+       weather = data.weather
+       temp = data.temp
+       humidity = data.humidity
+       city = data.city
+        console.log(weather)
+       displayWeather()
+
+    }catch(err){
+      console.log(err)
+    }
+  }
+  const displayWeather = () =>{
+   
       placeForm.classList.add('dp-none')
       
       const clockHtml = `
@@ -74,6 +101,7 @@
           <h1></h1>
         </div>
       `
+      console.log(weather)
       const weatherHtml = `
         <div class="weather">
           <div>${weather}, ${temp}&#8451;<br/>${humidity}&#37; Humidity</div>
@@ -85,9 +113,6 @@
       const clock = document.querySelector('.clock').childNodes[1];
       setInterval(()=>getTime(clock), 1000)
 
-    }catch(err){
-      console.log(err)
-    }
   }
    
   window.addEventListener('DOMContentLoaded', init)
