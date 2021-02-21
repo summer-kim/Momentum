@@ -32,8 +32,8 @@
       const cityData = await getWeather()
       if(cityData){
         getWeatherAPI(cityData.city)
-        info.addEventListener('mouseover', hover)
-        info.addEventListener('mouseout', hoverOut)
+        info.addEventListener('mouseenter', hover)
+        info.addEventListener('mouseleave', hoverOut)
       }else{
         info.addEventListener('click', onClickInfo)
         placeForm.addEventListener('submit', onSubmit)
@@ -43,6 +43,11 @@
     }
   }
   const hover = (e) =>{
+    const divExist = info.querySelector('.change-btn')
+    if(divExist){
+      divExist.classList.remove('dp-none')
+      return
+    }
     const div = document.createElement('div')
     div.innerText = 'Change'
     div.classList.add('change-btn')
@@ -93,7 +98,8 @@
     }
   }
   const displayWeather = () =>{
-   
+      infoTxt.classList.add('dp-none')
+      infoEmoji.classList.add('dp-none')
       placeForm.classList.add('dp-none')
       
       const clockHtml = `
@@ -101,14 +107,13 @@
           <h1></h1>
         </div>
       `
-      console.log(weather)
       const weatherHtml = `
         <div class="weather">
           <div>${weather}, ${temp}&#8451;<br/>${humidity}&#37; Humidity</div>
           <div>at ${city}</div>
         </div>
       `
-      info.innerHTML = clockHtml + weatherHtml
+      info.insertAdjacentHTML('beforeend' ,clockHtml + weatherHtml)
 
       const clock = document.querySelector('.clock').childNodes[1];
       setInterval(()=>getTime(clock), 1000)
