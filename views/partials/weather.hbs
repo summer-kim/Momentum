@@ -7,7 +7,9 @@
     </form>
 </div>
 <script src="./js/getTime.js"></script>
-<script>
+<script type="module">
+  import { setWeather } from './js/getData.js' 
+
   //element
   const info = document.querySelector('.info')
   const infoTxt = document.querySelector('.info-txt')
@@ -41,7 +43,8 @@
         humidity: current.humidity,
         city: location.name + ', ' + location.country,
         };
-   
+
+    setWeather(input) //set city of User in firestore.
     const { weather , temp , humidity , city } = data
     placeForm.classList.add('dp-none')
     
