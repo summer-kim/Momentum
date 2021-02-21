@@ -1,16 +1,4 @@
-const User = require('../model');
 const request = require('request');
-const { db } = require('../db');
-
-const addUser = async (req, res, next) => {
-  try {
-    const input = req.body;
-    await db.collection('users').doc().set(input);
-    res.json(input);
-  } catch (error) {
-    res.status(400).send(error.message);
-  }
-};
 
 const getPostition = (city, cb) => {
   const url =
@@ -50,7 +38,6 @@ const getWeather = (longi, lati, cb) => {
       const parsed = JSON.parse(body);
       cb(undefined, {
         weather: parsed.current.weather_descriptions[0],
-        time: parsed.location.localtime,
         temp: parsed.current.temperature,
         humidity: parsed.current.humidity,
       });
@@ -58,4 +45,4 @@ const getWeather = (longi, lati, cb) => {
   });
 };
 
-module.exports = { addUser, getPostition, getWeather };
+module.exports = { getPostition, getWeather };
