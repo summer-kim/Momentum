@@ -9,6 +9,7 @@ const partialsDir = path.join(__dirname, './views/partials');
 const publicPath = path.join(__dirname, './public');
 
 const authRouter = require('./server/routes/authRouter');
+const dataRouter = require('./server/routes/dataRouter');
 
 app.set('view engine', 'hbs');
 app.engine(
@@ -26,16 +27,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(authRouter.routes);
+app.use(dataRouter.routes);
 
 const checkAuth = require('./server/middleware');
 
-app.get('/', (req, res) => {
-  res.render(
-    'index'
-    // ,{
-    //   userName: req.user.displayName,
-    // }
-  );
+app.get('/', checkAuth, (req, res) => {
+  res.render('index', {
+    userName: req.user.displayName,
+  });
 });
 
 app.listen(PORT, () => {
