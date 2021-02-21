@@ -24,37 +24,43 @@
     e.preventDefault();
     let input = document.querySelector('.placeInput').value
 
-    try{
-      const res = await fetch('/user/city?city=' + input)
-      input = ''
-      if(!res.ok){
-        return window.alert('Enter a proper Name of City')
-      }
-      const data = await res.json()
-      console.log(data)
-      const {weather, temp , humidity, location} = data
-      
-      placeForm.classList.add('dp-none')
-      
-      const clockHtml = `
-        <div class="clock">
-          <h1></h1>
-        </div>
-      `
-      const weatherHtml = `
-        <div class="weather">
-          <div>${weather}, ${temp}&#8451;<br/>${humidity}&#37; Humidity</div>
-          <div>at ${location}</div>
-        </div>
-      `
-      info.innerHTML = clockHtml + weatherHtml
+    const url =
+    'http://api.weatherstack.com/current?access_key=bd459e9c00f721c07d47a7debfbbe4ff&query=$' +
+    input;
 
-      const clock = document.querySelector('.clock').childNodes[1];
-      setInterval(()=>getTime(clock), 1000)
-    }catch(error){
-      input = ''
-      window.alert(error)
+    const res = await fetch(url);
+    const { error = '', current = '', location = '' } = await res.json();
+
+    if (error) {
+      return window.alert('Enter a vaild name of city' );
     }
+
+    const data = {
+        temp: current.temperature,
+        weather: current.weather_descriptions[0],
+        humidity: current.humidity,
+        city: location.name + ', ' + location.country,
+        };
+   
+    const { weather , temp , humidity , city } = data
+    placeForm.classList.add('dp-none')
+    
+    const clockHtml = `
+      <div class="clock">
+        <h1></h1>
+      </div>
+    `
+    const weatherHtml = `
+      <div class="weather">
+        <div>${weather}, ${temp}&#8451;<br/>${humidity}&#37; Humidity</div>
+        <div>at ${city}</div>
+      </div>
+    `
+    info.innerHTML = clockHtml + weatherHtml
+
+    const clock = document.querySelector('.clock').childNodes[1];
+    setInterval(()=>getTime(clock), 1000)
+   
   }
 
   info.addEventListener('click', onClickInfo)
