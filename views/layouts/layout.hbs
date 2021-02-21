@@ -17,11 +17,10 @@
   <script>
     const errMsg = document.querySelector('.err')
     const lifter = () =>{
-      if(errMsg){
-      setTimeout(()=> errMsg.style.transform = 'translateY(-50px)', 4500)
-      }
+      setTimeout(()=> errMsg.style.transform = 'translateY(-50px)', 4500) 
     }
+    if(errMsg){
     errMsg.addEventListener('load', lifter)
-  
+    }
   </script>
 </html>
