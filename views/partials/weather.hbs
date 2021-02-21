@@ -3,7 +3,7 @@
     <div class="info-txt "> Get Time <br/>&amp;Weather</div>
     <form class="place-form dp-none">
         <input class="placeInput" type="text" placeholder="Name of City" name="city" required=""/>
-        <button type="submit">submit</button>
+        <button type="submit">Submit</button>
     </form>
 </div>
 <script src="./js/getTime.js"></script>
@@ -22,29 +22,39 @@
 
   const onSubmit = async(e) =>{
     e.preventDefault();
-    
-    const input = document.querySelector('.placeInput').value
-    const res = await fetch('/user/city?city=' + input)
-    const data = await res.json()
-    const {weather, temp , humidity, location} = data
+    let input = document.querySelector('.placeInput').value
 
-    placeForm.classList.add('dp-none')
-    
-    const clockHtml = `
-      <div class="clock">
-        <h1></h1>
-      </div>
-    `
-    const weatherHtml = `
-      <div class="weather">
-        <div>${weather}, ${temp}&#8451,${humidity}</div>
-        <div>at ${location}</div>
-      </div>
-    `
-    info.innerHTML = clockHtml + weatherHtml
+    try{
+      const res = await fetch('/user/city?city=' + input)
+      input = ''
+      if(!res.ok){
+        return window.alert('Enter a proper Name of City')
+      }
+      const data = await res.json()
+      console.log(data)
+      const {weather, temp , humidity, location} = data
+      
+      placeForm.classList.add('dp-none')
+      
+      const clockHtml = `
+        <div class="clock">
+          <h1></h1>
+        </div>
+      `
+      const weatherHtml = `
+        <div class="weather">
+          <div>${weather}, ${temp}&#8451;<br/>${humidity}&#37; Humidity</div>
+          <div>at ${location}</div>
+        </div>
+      `
+      info.innerHTML = clockHtml + weatherHtml
 
-    const clock = document.querySelector('.clock').childNodes[1];
-    setInterval(()=>getTime(clock), 1000)
+      const clock = document.querySelector('.clock').childNodes[1];
+      setInterval(()=>getTime(clock), 1000)
+    }catch(error){
+      input = ''
+      window.alert(error)
+    }
   }
 
   info.addEventListener('click', onClickInfo)
