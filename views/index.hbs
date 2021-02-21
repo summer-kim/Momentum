@@ -1,13 +1,6 @@
 <section>
   <div class="left-side m1">
-    <div class="info txt-center">
-      <i class="fas fa-plus emoji-plus "></i>
-      <div class="info-txt "> Get Time <br/>&amp;Weather</div>
-      <form class="place-form dp-none">
-        <input class="placeInput" type="text" placeholder="Name of City" name="city" required=""/>
-        <button type="submit">submit</button>
-      </form>
-    </div>
+    {{>weather}}
     <div class="links flex-col">
       <a class="folder-title"><i class="fas fa-link"></i> My Links</a>
       <a class="folder">Develop site</a>
@@ -35,47 +28,3 @@
     <button type="submit" class="logout-btn">Logout</button>
   </form>
 </section>
-    <script src="./js/getTime.js"></script>
-<script>
-  //element
-  const info = document.querySelector('.info')
-  const infoTxt = document.querySelector('.info-txt')
-  const infoEmoji = document.querySelector('.emoji-plus')
-  const placeForm = document.querySelector('.place-form')
-
-  const onClickInfo = (e) =>{
-    infoTxt.classList.add('dp-none')
-    infoEmoji.classList.add('dp-none')
-    placeForm.classList.remove('dp-none')
-  }
-
-  const onSubmit = async(e) =>{
-    e.preventDefault();
-    
-    const input = document.querySelector('.placeInput').value
-    const res = await fetch('/user/city?city=' + input)
-    const data = await res.json()
-    const {weather, temp , humidity, location} = data
-
-    placeForm.classList.add('dp-none')
-    
-   const clockHtml = `
-      <div class="clock">
-        <h1></h1>
-      </div>
-    `
-    const weatherHtml = `
-      <div class="weather">
-        <div>${weather}, ${temp}&#8451,${humidity}</div>
-        <div>at ${location}</div>
-      </div>
-    `
-    info.innerHTML = clockHtml + weatherHtml
-
-    const clock = document.querySelector('.clock').childNodes[1];
-    setInterval(()=>getTime(clock), 1000)
-  }
-
-  info.addEventListener('click', onClickInfo)
-  placeForm.addEventListener('submit', onSubmit)
-</script>
