@@ -8,7 +8,7 @@
 </div>
 <script src="./js/getTime.js"></script>
 <script type="module">
-  import { setWeather } from './js/getData.js' 
+  import { setWeather, getWeather } from './js/getData.js' 
 
   //element
   const info = document.querySelector('.info')
@@ -22,51 +22,74 @@
     placeForm.classList.remove('dp-none')
   }
 
-  const onSubmit = async(e) =>{
-    e.preventDefault();
-    let input = document.querySelector('.placeInput').value
-
-    const url =
-    'http://api.weatherstack.com/current?access_key=bd459e9c00f721c07d47a7debfbbe4ff&query=$' +
-    input;
-
-    const res = await fetch(url);
-    const { error = '', current = '', location = '' } = await res.json();
-
-    if (error) {
-      return window.alert('Enter a vaild name of city' );
+  const init = async() =>{
+    try{
+      const cityData = await getWeather()
+      console.log(cityData)
+      if(cityData){
+        displayWeather(cityData.city)
+      }else{
+        info.addEventListener('click', onClickInfo)
+        placeForm.addEventListener('submit', onSubmit)
+      }
+    }catch(err){
+      console.log(err)
     }
-
-    const data = {
-        temp: current.temperature,
-        weather: current.weather_descriptions[0],
-        humidity: current.humidity,
-        city: location.name + ', ' + location.country,
-        };
-
-    setWeather(input) //set city of User in firestore.
-    const { weather , temp , humidity , city } = data
-    placeForm.classList.add('dp-none')
-    
-    const clockHtml = `
-      <div class="clock">
-        <h1></h1>
-      </div>
-    `
-    const weatherHtml = `
-      <div class="weather">
-        <div>${weather}, ${temp}&#8451;<br/>${humidity}&#37; Humidity</div>
-        <div>at ${city}</div>
-      </div>
-    `
-    info.innerHTML = clockHtml + weatherHtml
-
-    const clock = document.querySelector('.clock').childNodes[1];
-    setInterval(()=>getTime(clock), 1000)
-   
   }
 
-  info.addEventListener('click', onClickInfo)
-  placeForm.addEventListener('submit', onSubmit)
+  const onSubmit = (e) =>{
+    e.preventDefault();
+    let input = document.querySelector('.placeInput').value
+    displayWeather(input)
+    input = ''
+  }
+
+  const displayWeather = async(value) =>{
+    const url =
+    'http://api.weatherstack.com/current?access_key=bd459e9c00f721c07d47a7debfbbe4ff&query=$' +
+    value;
+
+    try{
+
+      const res = await fetch(url);
+      const { error = '', current = '', location = '' } = await res.json();
+
+      if (error) {
+        return window.alert('Enter a vaild name of city' );
+      }
+
+      const data = {
+          temp: current.temperature,
+          weather: current.weather_descriptions[0],
+          humidity: current.humidity,
+          city: location.name + ', ' + location.country,
+          };
+
+      setWeather(value) //set City of User Data in firestore.
+      const { weather , temp , humidity , city } = data
+      placeForm.classList.add('dp-none')
+      
+      const clockHtml = `
+        <div class="clock">
+          <h1></h1>
+        </div>
+      `
+      const weatherHtml = `
+        <div class="weather">
+          <div>${weather}, ${temp}&#8451;<br/>${humidity}&#37; Humidity</div>
+          <div>at ${city}</div>
+        </div>
+      `
+      info.innerHTML = clockHtml + weatherHtml
+
+      const clock = document.querySelector('.clock').childNodes[1];
+      setInterval(()=>getTime(clock), 1000)
+
+    }catch(err){
+      console.log(err)
+    }
+  }
+   
+  window.addEventListener('DOMContentLoaded', init)
   
   </script>

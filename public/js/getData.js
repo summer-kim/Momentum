@@ -8,3 +8,14 @@ export const setWeather = async (city) => {
     console.log(err);
   }
 };
+
+export const getWeather = async () => {
+  const url = '/data/get/weather/';
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};

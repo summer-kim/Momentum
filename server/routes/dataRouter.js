@@ -14,4 +14,15 @@ router.get('/data/weather/:city', async (req, res) => {
   }
 });
 
+router.get('/data/get/weather', async (req, res) => {
+  try {
+    const user = auth.currentUser;
+    const doc = await db.collection(user.displayName).doc('city').get();
+    if (doc.exists) {
+      return res.json(doc.data());
+    }
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
 module.exports = { routes: router };
