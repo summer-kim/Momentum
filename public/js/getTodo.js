@@ -1,5 +1,5 @@
-export const setFolder = async (folderName) => {
-  const url = '/data/folder/' + folderName;
+export const setFolder = async (Name, isLink) => {
+  const url = `/data/${isLink ? 'link' : 'folder'}/${Name}`;
 
   try {
     const res = await fetch(url);
