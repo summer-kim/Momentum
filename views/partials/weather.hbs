@@ -1,49 +1,57 @@
-<div class="info txt-center">
-    <i class="fas fa-plus emoji-plus "></i>
-    <div class="info-txt "> Get Time <br/>&amp;Weather</div>
-    <form class="place-form dp-none">
-        <input class="placeInput" type="text" placeholder="Name of City" name="city" required=""/>
-        <button type="submit">Submit</button>
-    </form>
+<div class="info txt-center flex-col">
+    <div class="clock">
+          <h1></h1>
+    </div>
+    <div class="frame"></div>
+
+    
 </div>
 
 
 <script src="./js/getTime.js"></script>
 <script type="module">
   import { setWeather, getWeather } from './js/getData.js' 
+   let weather, temp, humidity, city  = ''
+  //variables to display weather
 
   //element
   const info = document.querySelector('.info')
-  const infoTxt = document.querySelector('.info-txt')
-  const infoEmoji = document.querySelector('.emoji-plus')
-  const placeForm = document.querySelector('.place-form')
+  const frame = document.querySelector('.frame')
+  
+  //frame for User who doesn't have Weather Data
+  const frame1 = `<div class="info-txt"><i class="fas fa-plus emoji-plus "></i> GET<br/> Weather</div>`
+  //frame of form to get Weather
+  const frame2 = `
+        <form class="place-form">
+          <input class="placeInput" type="text" placeholder="Name of City" name="city" required=""/>
+          <button type="submit">Submit</button>
+        </form>
+        `
+  //frame for User who has Weather Data
+  const frame3 = () =>( `
+        <div class="weather" >
+          <div>${weather}, ${temp}&#8451;<br/>${humidity}&#37; Humidity</div>
+          <div>at ${city}</div>
+        </div>`
+        )
 
-  let weather, temp, humidity, city  = ''
-  //variables to display weather
-
-  const onClickInfo = (e) =>{
-    infoTxt.classList.add('dp-none')
-    infoEmoji.classList.add('dp-none')
-    placeForm.classList.remove('dp-none')
-  }
-
+  
   const init = async() =>{
+    frame.innerHTML = frame1 //when User doesn't have Weather Data
+    frame.firstChild.addEventListener('click', formVisible)
     try{
       const cityData = await getWeather()
-      if(cityData){
-        getWeatherAPI(cityData.city)
-        info.addEventListener('mouseenter', hover)
-        info.addEventListener('mouseleave', hoverOut)
-      }else{
-        info.addEventListener('click', onClickInfo)
-        placeForm.addEventListener('submit', onSubmit)
+      if(cityData.city){
+        getWeatherAPI(cityData.city)//when User has Weather Data
       }
     }catch(err){
       console.log(err)
     }
   }
-  const hover = (e) =>{
-    const divExist = info.querySelector('.change-btn')
+
+//funnction when Mouse is on the Weather div
+  const hover = () =>{
+    const divExist = frame.querySelector('.change-btn')
     if(divExist){
       divExist.classList.remove('dp-none')
       return
@@ -51,10 +59,26 @@
     const div = document.createElement('div')
     div.innerText = 'Change'
     div.classList.add('change-btn')
-    info.append(div)
+    div.addEventListener('click', formVisible)
+    frame.append(div)
   }
-  const hoverOut = (e) =>{
-    info.lastElementChild.classList.add('dp-none')
+
+  const hoverOut = () => {
+    const divExist = frame.querySelector('.change-btn')
+
+    if(divExist){
+      divExist.classList.add('dp-none')
+    }
+  }
+
+  const formVisible = () =>{
+    frame.innerHTML = frame2
+    //Event at Line 117
+    info.removeEventListener('mouseenter', hover)
+    info.removeEventListener('mouseleave', hoverOut)
+
+    const weatherForm = document.querySelector('.place-form')
+    weatherForm.addEventListener("submit", onSubmit)
   }
 
   const onSubmit = (e) =>{
@@ -85,39 +109,22 @@
           city: location.name + ', ' + location.country,
           };
 
-      setWeather(value) //set City of User Data in firestore.
+        setWeather(value) //set City of User Data in firestore.
+
        weather = data.weather
        temp = data.temp
        humidity = data.humidity
        city = data.city
-        console.log(weather)
-       displayWeather()
+       
+       frame.innerHTML = frame3()
+       const weatherDisplay = document.querySelector('.weather')
+       //If mouse is entered, display turns into Change Button
+        info.addEventListener('mouseenter', hover)
+        info.addEventListener('mouseleave', hoverOut)
 
     }catch(err){
       console.log(err)
     }
-  }
-  const displayWeather = () =>{
-      infoTxt.classList.add('dp-none')
-      infoEmoji.classList.add('dp-none')
-      placeForm.classList.add('dp-none')
-      
-      const clockHtml = `
-        <div class="clock">
-          <h1></h1>
-        </div>
-      `
-      const weatherHtml = `
-        <div class="weather">
-          <div>${weather}, ${temp}&#8451;<br/>${humidity}&#37; Humidity</div>
-          <div>at ${city}</div>
-        </div>
-      `
-      info.insertAdjacentHTML('beforeend' ,clockHtml + weatherHtml)
-
-      const clock = document.querySelector('.clock').childNodes[1];
-      setInterval(()=>getTime(clock), 1000)
-
   }
    
   window.addEventListener('DOMContentLoaded', init)

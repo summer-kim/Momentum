@@ -61,7 +61,8 @@ section {
   width: 100%;
 }
 .info {
-  height: 120px;
+  position: relative;
+  min-height: 120px;
   border: 2px solid var(--border-color);
   border-radius: 5px;
   padding: 0.5rem 1rem;
@@ -81,15 +82,18 @@ section {
 }
 .info .emoji-plus {
   display: inline-block;
-  padding: 5px;
+  padding: 3px;
   width: auto;
   border: 3px solid var(--font-color);
   border-radius: 50%;
-  margin: 0.5rem;
+  margin: 0 2px;
 }
 .info-txt {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 600;
+  border: 2px solid;
+  border-radius: 5px;
+  padding: 5px 0;
 }
 .change-btn {
   position: absolute;
@@ -97,7 +101,7 @@ section {
   top: 0;
   left: 0;
   width: 100%;
-  height: inherit;
+  height: 100%;
   border-radius: 5px;
   font-size: 1.5rem;
   display: flex;
