@@ -2,11 +2,11 @@
   <div class="left-side m1">
     {{>weather}}
     <div class="links flex-col">
-      <a class="folder-title"><i class="fas fa-link"></i> My Links</a>
-      <a class="folder">Develop site</a>
-      <a class="folder">useful links for portfolio</a>
-      <a class="folder">Business</a>
-      <a class="folder">ref</a>
+      <a class="link-title"><i class="fas fa-link"></i> My Links</a>
+      <a class="link">Develop site</a>
+      <a class="link">useful links for portfolio</a>
+      <a class="link">Business</a>
+      <a class="link"><i class="fas fa-plus emoji-plus "></i></a>
     </div>
   </div>
   <div class="container flex-col">
@@ -23,8 +23,27 @@
     <div class="folder selected">Career</div>
     <div class="folder">Business</div>
     <div class="folder">My Dog</div>
+    <div class="folder"><i class="fas fa-plus emoji-plus "></i></div>
   </div>
   <form action="/login/logout" method="GET" class="logout">
     <button type="submit" class="logout-btn">Logout</button>
   </form>
 </section>
+<script>
+  const folderBtn = document.querySelector('.folder-title')
+  const linkBtn = document.querySelector('.link-title')
+
+  const folders = document.querySelectorAll('.folder')
+  const links = document.querySelectorAll('.link')
+
+  const onClick = (e) =>{
+    const lists = Array.from(e.currentTarget.parentNode.children).slice(1)
+    lists.forEach(element=>element.classList.toggle('FadeInOut'))
+  }
+
+
+  
+  folderBtn.addEventListener('click', onClick)
+  linkBtn.addEventListener('click', onClick)
+
+</script>

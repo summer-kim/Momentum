@@ -80,7 +80,7 @@ section {
 .info .weather div {
   font-size: 1rem;
 }
-.info .emoji-plus {
+.emoji-plus {
   display: inline-block;
   padding: 3px;
   width: auto;
@@ -182,9 +182,13 @@ section {
   color: var(--font-color);
   width: 16vw;
 }
-.right-side:nth-child(1),
-.links:nth-child(1) {
-  background: var(--main-color2);
+.right-side > div:nth-last-child(1),
+.links > a:nth-last-child(1) {
+  text-align: center;
+}
+.right-side > div:nth-child(1),
+.links > a:nth-child(1) {
+  z-index: 1;
 }
 .right-side > div,
 .links > a {
@@ -194,7 +198,11 @@ section {
   padding: 0.5rem 1rem;
   margin: 0.5rem 0;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.FadeInOut {
+  transform: translateY(-60px);
+  opacity: 0;
 }
 .right-side > div:hover,
 .links > a:hover {
