@@ -2,7 +2,7 @@
   <div class="left-side m1">
     {{>weather}}
     <div class="links flex-col">
-      <a class="link-title"><i class="fas fa-link"></i> My Links</a>
+      <a class="link-title btn"><i class="fas fa-link"></i> My Links</a>
       <a class="link">Develop site</a>
       <a class="link">useful links for portfolio</a>
       <a class="link">Business</a>
@@ -18,7 +18,7 @@
     <ul class="todoList"></ul>
   </div>
   <div class="right-side m1 flex-col">
-    <div class="folder-title"><i class="far fa-folder-open"></i> My Folder</div>
+    <div class="folder-title btn"><i class="far fa-folder-open"></i> My Folder</div>
     <div class="folder">Routine</div>
     <div class="folder selected">Career</div>
     <div class="folder">Business</div>
@@ -29,21 +29,51 @@
     <button type="submit" class="logout-btn">Logout</button>
   </form>
 </section>
-<script>
-  const folderBtn = document.querySelector('.folder-title')
-  const linkBtn = document.querySelector('.link-title')
 
-  const folders = document.querySelectorAll('.folder')
-  const links = document.querySelectorAll('.link')
+<script type="module">
+  import { setFolder } from './js/getTodo.js' 
+  
+  const spreader = document.querySelectorAll('.btn')
+  
+  //parent node of folders
+  const parent = document.querySelector('.right-side')
 
+  //when User click "My Folders" or "My Links"
   const onClick = (e) =>{
     const lists = Array.from(e.currentTarget.parentNode.children).slice(1)
     lists.forEach(element=>element.classList.toggle('FadeInOut'))
   }
 
+  //when User click create Folder or create Link button
+  const formDisplay = (e) =>{
+    parent.lastElementChild.removeEventListener('click', formDisplay)
+    e.currentTarget.innerHTML = `
+     <form class="place-form">
+        <input class="folderInput" type="text" placeholder="Name of Folder" name="folder" required=""/>
+        <button type="submit">Submit</button>
+      </form>
+    `
+    e.currentTarget.addEventListener('submit', onSubmitFolder)
+  } 
 
+  const onSubmitFolder = async(e) =>{
+    e.preventDefault();
+    let input = e.currentTarget.querySelector('.folderInput').value
+    await setFolder(input)
+    parent.lastElementChild.remove()
+    createFolder(input)
+  }
   
-  folderBtn.addEventListener('click', onClick)
-  linkBtn.addEventListener('click', onClick)
+  const createFolder = (folderName) =>{
+    const newFolder = `
+      <div class="folder">${folderName}</div>
+      <div class="folder"><i class="fas fa-plus emoji-plus "></i></div>
+      `
+    parent.insertAdjacentHTML('beforeend', newFolder)
+    parent.lastElementChild.addEventListener('click', formDisplay)
+  }
+
+  parent.lastElementChild.addEventListener('click', formDisplay)
+  spreader.forEach(btn=>btn.addEventListener('click', onClick))
 
 </script>

@@ -10,6 +10,7 @@ const publicPath = path.join(__dirname, './public');
 
 const authRouter = require('./server/routes/authRouter');
 const dataRouter = require('./server/routes/dataRouter');
+const todoRouter = require('./server/routes/todoRouter');
 
 app.set('view engine', 'hbs');
 app.engine(
@@ -28,6 +29,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(authRouter.routes);
 app.use(dataRouter.routes);
+app.use(todoRouter.routes);
 
 const checkAuth = require('./server/middleware');
 
