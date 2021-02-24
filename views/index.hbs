@@ -1,23 +1,19 @@
 <section>
   <div class="left-side m1">
     {{>weather}}
+
     <div class="parent links flex-col">
       <a class="link-title spreadButton"><i class="fas fa-link"></i> My Links</a>
-      
     </div>
-  </div>
-  <div class="container flex-col">
 
-    <h4 class="greeting">Welcome, {{userName}}</h4>
-    <form class="todoForm">
-      <input type="text" placeholder="To do" />
-    </form>
-    <ul class="todoList"></ul>
   </div>
+
+  {{> todos}}
+
   <div class="parent right-side m1 flex-col">
     <div class="folder-title spreadButton"><i class="far fa-folder-open"></i> My Folder</div>
-    
   </div>
+
   <form action="/login/logout" method="GET" class="logout">
     <button type="submit" class="logout-btn">Logout</button>
   </form>
@@ -25,21 +21,30 @@
 
 <script type="module">
   import { setFolder, getInitialData} from './js/getTodo.js' 
-  let FolderData = {}
-  let LinkData = {}
 
   //Ingredient for make new Folder element or Link element
-  const addBtnIcon = "<i class="fas fa-plus emoji-plus "></i>"
-  const makeElement = (isLink, value) =>{
-      const index = isLink ? 0 : 1
-      const element = isLink ? 'a' : 'div'
+  const addBtnIcon = '<i class="fas fa-plus emoji-plus "></i>'
+  const makeElement = (isLink, isAddBtn, value) =>{
+    const element = isLink ? 'a' : 'div'
+    const className = isLink ? 'link' : 'folder'
 
-      return `<${element} class="${isLink ? 'link' : 'folder'} FadeInOut">${value}</${element}>`
+    const newElement = document.createElement(element)
+    newElement.classList.add(className)
+    newElement.classList.add('FadeInOut')
+    newElement.innerHTML = value
+
+    if(isAddBtn){
+      newElement.addEventListener('click', formDisplay)
+      return newElement
+    }
+    newElement.addEventListener('click', onClickGetTodo)
+    return newElement
   }
 
   const init = async() =>{
     //button to spread Folders and Links
     const spreadButtons = document.querySelectorAll('.spreadButton')
+    spreadButtons.forEach(btn=>btn.addEventListener('click', spreadFolder))
   
     //parent node of Folders and Links
     const parents = document.querySelectorAll('.parent')
@@ -47,17 +52,17 @@
     //parents[1] = folder parent Div
 
     const data = await getInitialData() 
-    FolderData = data.folders
-    LinkData = data.links
+    const FolderList = Object.keys(data.folders).concat([addBtnIcon])
+    const LinkList = Object.keys(data.links).concat([addBtnIcon])
 
-    Object.keys(LinkData).forEach(link => parents[0].insertAdjacentHTML('beforeend', makeElement(true, link)))
-    Object.keys(FolderData).forEach(folder => parents[1].insertAdjacentHTML('beforeend', makeElement(false, folder)))
-    
-    parents[0].insertAdjacentHTML('beforeend', makeElement(true, addBtnIcon))
-    parents[1].insertAdjacentHTML('beforeend', makeElement(false, addBtnIcon))
-
-    parents.forEach(parent=>parent.lastElementChild.addEventListener('click', formDisplay))
-    spreadButtons.forEach(btn=>btn.addEventListener('click', spreadFolder))
+    FolderList.forEach((value, index) => {
+        const isAddBtn = index === FolderList.length-1 ? true : false
+        parents[0].append(makeElement(true ,isAddBtn ,value))
+        })
+    LinkList.forEach((value, index) => {
+        const isAddBtn = index === LinkList.length-1 ? true : false
+        parents[1].append(makeElement(false ,isAddBtn ,value))
+        })
   }
 
   //Interaction when User click "My Folders" or "My Links"
@@ -90,9 +95,8 @@
     const parent = e.target.parentElement.parentElement
 
     parent.lastElementChild.remove() //delete submit form
-    parent.insertAdjacentHTML('beforeend', makeElement(isLink, input))//new Div(input)
-    parent.insertAdjacentHTML('beforeend', makeElement(isLink, addBtnIcon))//new Div(button for submit new input)
-    parent.lastElementChild.addEventListener('click', formDisplay)
+    parent.append(makeElement(isLink, false, input))//new Div(input)
+    parent.append(makeElement(isLink, true, addBtnIcon))//new Div(button for submit new input)
   }
 
   window.addEventListener('DOMContentLoaded', init)
