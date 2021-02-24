@@ -2,11 +2,8 @@
   <div class="left-side m1">
     {{>weather}}
     <div class="parent links flex-col">
-      <a class="link-title spreader"><i class="fas fa-link"></i> My Links</a>
-      <a class="link">Develop site</a>
-      <a class="link">useful links for portfolio</a>
-      <a class="link">Business</a>
-      <a class="link"><i class="fas fa-plus emoji-plus "></i></a>
+      <a class="link-title spreadButton"><i class="fas fa-link"></i> My Links</a>
+      
     </div>
   </div>
   <div class="container flex-col">
@@ -18,12 +15,8 @@
     <ul class="todoList"></ul>
   </div>
   <div class="parent right-side m1 flex-col">
-    <div class="folder-title spreader"><i class="far fa-folder-open"></i> My Folder</div>
-    <div class="folder">Routine</div>
-    <div class="folder selected">Career</div>
-    <div class="folder">Business</div>
-    <div class="folder">My Dog</div>
-    <div class="folder"><i class="fas fa-plus emoji-plus "></i></div>
+    <div class="folder-title spreadButton"><i class="far fa-folder-open"></i> My Folder</div>
+    
   </div>
   <form action="/login/logout" method="GET" class="logout">
     <button type="submit" class="logout-btn">Logout</button>
@@ -31,10 +24,43 @@
 </section>
 
 <script type="module">
-  import { setFolder} from './js/getTodo.js' 
+  import { setFolder, getInitialData} from './js/getTodo.js' 
+  let FolderData = {}
+  let LinkData = {}
+
+  const init = async() =>{
+    //button to spread Folders and Links
+    const spreadButtons = document.querySelectorAll('.spreadButton')
   
+    //parent node of Folders and Links
+    const parents = document.querySelectorAll('.parent')
+    //parents[0] = link parent Div
+    //parents[1] = folder parent Div
+
+    const data = await getInitialData() 
+    FolderData = data.folders
+    LinkData = data.links
+
+    Object.keys(LinkData).forEach(link =>{
+      const newLink = `<a class="link FadeInOut">${link}</a>`
+      parents[0].insertAdjacentHTML('beforeend', newLink)
+    })
+    const addButtonLink = '<a class="link FadeInOut"><i class="fas fa-plus emoji-plus "></a>'
+    parents[0].insertAdjacentHTML('beforeend', addButtonLink)
+
+    Object.keys(FolderData).forEach(folder =>{
+      const newFolder = `<div class="folder FadeInOut">${folder}</div>`
+      parents[1].insertAdjacentHTML('beforeend', newFolder)
+    })
+    const addButtonFolder = '<div class="folder FadeInOut"><i class="fas fa-plus emoji-plus "></div>'
+    parents[1].insertAdjacentHTML('beforeend', addButtonFolder)
+
+    parents.forEach(parent=>parent.lastElementChild.addEventListener('click', formDisplay))
+    spreadButtons.forEach(btn=>btn.addEventListener('click', spreadFolder))
+  }
+
   //when User click "My Folders" or "My Links"
-  const onClick = (e) =>{
+  const spreadFolder = (e) =>{
     const childrenDivs = e.currentTarget.parentNode.children
     const lists = Array.from(childrenDivs).slice(1) //except first Div = buttons to toggle
     lists.forEach(element=>element.classList.toggle('FadeInOut'))
@@ -74,17 +100,6 @@
       `
     parent.insertAdjacentHTML('beforeend', newDiv)
     parent.lastElementChild.addEventListener('click', formDisplay)
-  }
-
-  const init = () =>{
-    //button to spread Folders and Links
-    const spreader = document.querySelectorAll('.spreader')
-  
-    //parent node of Folders and Links
-    const parents = document.querySelectorAll('.parent')
-
-    parents.forEach(parent=>parent.lastElementChild.addEventListener('click', formDisplay))
-    spreader.forEach(btn=>btn.addEventListener('click', onClick))
   }
 
   window.addEventListener('DOMContentLoaded', init)

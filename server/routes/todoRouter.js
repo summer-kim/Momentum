@@ -32,4 +32,27 @@ router.get('/data/link/:linkName', async (req, res) => {
   }
 });
 
+router.get('/data/get/initData', async (req, res) => {
+  const data = { links: {}, folders: {} };
+  try {
+    const user = auth.currentUser;
+    const docs = await db.collection(user.displayName).get();
+
+    docs.forEach((doc) => {
+      switch (doc.id) {
+        case 'links':
+          data.links = doc.data();
+          break;
+        case 'folders':
+          data.folders = doc.data();
+          break;
+        default:
+          break;
+      }
+    });
+    return res.json(data);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
 module.exports = { routes: router };

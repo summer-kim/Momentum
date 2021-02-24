@@ -9,6 +9,18 @@ export const setFolder = async (Name, isLink) => {
   }
 };
 
+export const getInitialData = async () => {
+  const url = `/data/get/initData`;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 // const todoForm = document.querySelector('.todoForm');
 // const todoInput = todoForm.childNodes[1];
 // const todoList = document.querySelector('.todoList');
