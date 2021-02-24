@@ -28,6 +28,15 @@
   let FolderData = {}
   let LinkData = {}
 
+  //Ingredient for make new Folder element or Link element
+  const addBtnIcon = "<i class="fas fa-plus emoji-plus "></i>"
+  const makeElement = (isLink, value) =>{
+      const index = isLink ? 0 : 1
+      const element = isLink ? 'a' : 'div'
+
+      return `<${element} class="${isLink ? 'link' : 'folder'} FadeInOut">${value}</${element}>`
+  }
+
   const init = async() =>{
     //button to spread Folders and Links
     const spreadButtons = document.querySelectorAll('.spreadButton')
@@ -41,25 +50,17 @@
     FolderData = data.folders
     LinkData = data.links
 
-    Object.keys(LinkData).forEach(link =>{
-      const newLink = `<a class="link FadeInOut">${link}</a>`
-      parents[0].insertAdjacentHTML('beforeend', newLink)
-    })
-    const addButtonLink = '<a class="link FadeInOut"><i class="fas fa-plus emoji-plus "></a>'
-    parents[0].insertAdjacentHTML('beforeend', addButtonLink)
-
-    Object.keys(FolderData).forEach(folder =>{
-      const newFolder = `<div class="folder FadeInOut">${folder}</div>`
-      parents[1].insertAdjacentHTML('beforeend', newFolder)
-    })
-    const addButtonFolder = '<div class="folder FadeInOut"><i class="fas fa-plus emoji-plus "></div>'
-    parents[1].insertAdjacentHTML('beforeend', addButtonFolder)
+    Object.keys(LinkData).forEach(link => parents[0].insertAdjacentHTML('beforeend', makeElement(true, link)))
+    Object.keys(FolderData).forEach(folder => parents[1].insertAdjacentHTML('beforeend', makeElement(false, folder)))
+    
+    parents[0].insertAdjacentHTML('beforeend', makeElement(true, addBtnIcon))
+    parents[1].insertAdjacentHTML('beforeend', makeElement(false, addBtnIcon))
 
     parents.forEach(parent=>parent.lastElementChild.addEventListener('click', formDisplay))
     spreadButtons.forEach(btn=>btn.addEventListener('click', spreadFolder))
   }
 
-  //when User click "My Folders" or "My Links"
+  //Interaction when User click "My Folders" or "My Links"
   const spreadFolder = (e) =>{
     const childrenDivs = e.currentTarget.parentNode.children
     const lists = Array.from(childrenDivs).slice(1) //except first Div = buttons to toggle
@@ -87,18 +88,10 @@
     await setFolder(input, isLink)
 
     const parent = e.target.parentElement.parentElement
-    parent.lastElementChild.remove()
-    createFolder(input, parent, isLink)
-  }
 
-  const createFolder = (Name, parent, isLink) =>{
-    const className = isLink ? 'link' : 'folder'
-    const element = isLink ? 'a' : 'div'
-    const newDiv = `
-      <${element} class=${className}>${Name}</${element}>
-      <${element} class=${className}><i class="fas fa-plus emoji-plus "></i></${element}>
-      `
-    parent.insertAdjacentHTML('beforeend', newDiv)
+    parent.lastElementChild.remove() //delete submit form
+    parent.insertAdjacentHTML('beforeend', makeElement(isLink, input))//new Div(input)
+    parent.insertAdjacentHTML('beforeend', makeElement(isLink, addBtnIcon))//new Div(button for submit new input)
     parent.lastElementChild.addEventListener('click', formDisplay)
   }
 
