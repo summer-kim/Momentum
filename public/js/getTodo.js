@@ -11,12 +11,10 @@ export const setFolder = async (Name, isLink) => {
 
 export const getFolder = async (Name, isLink) => {
   const url = `/data/get/${isLink ? 'link' : 'folder'}/${Name}`;
-  console.log('url :' + url);
 
   try {
     const res = await fetch(url);
     const data = await res.json();
-    console.log('data :' + data);
     return data;
   } catch (err) {
     console.log(err);
@@ -35,6 +33,23 @@ export const getInitialData = async () => {
   }
 };
 
+export const addTodo = async (value, folderName) => {
+  const url = '/data/add/folder';
+  const config = {
+    method: 'POST', // or 'PUT'
+    body: JSON.stringify({ todo: value, folderName }), // data can be `string` or {object}!
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  try {
+    const res = await fetch(url, config);
+    return;
+  } catch (err) {
+    console.log(err);
+  }
+};
 // const todoForm = document.querySelector('.todoForm');
 // const todoInput = todoForm.childNodes[1];
 // const todoList = document.querySelector('.todoList');

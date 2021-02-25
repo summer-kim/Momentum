@@ -96,4 +96,29 @@ router.get('/data/get/link/:linkName', async (req, res) => {
     res.status(400).send(error.message);
   }
 });
+
+//Add todo to specific Folder
+router.post('/data/add/folder', async (req, res) => {
+  try {
+    const user = auth.currentUser;
+    const { folderName, todo } = req.body;
+    let folder = [];
+
+    const doc = await db.collection(user.displayName).doc('folders').get();
+    if (doc.exists) {
+      const folders = doc.data();
+      folder = folders[folderName];
+      folder.push(todo);
+    } else {
+      return res.json({ msg: 'No folder matched' });
+    }
+
+    await db
+      .collection(user.displayName)
+      .doc('folders')
+      .update({ [folderName]: folder });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
 module.exports = { routes: router };

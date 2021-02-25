@@ -1,7 +1,14 @@
-import { getFolder } from './getTodo.js';
+import { getFolder, addTodo } from './getTodo.js';
 
 const todoForm = document.querySelector('.todoForm');
 const todoTitle = document.querySelector('.todo-title');
+const todoList = document.querySelector('.todoList');
+
+const newTodo = (todo) => `
+        <li>${todo}
+            <i class="fas fa-times"></i>
+        </li>
+    `;
 
 export const onClickGetTodo = async (e) => {
   const selectedBefore = document.querySelector('.selected');
@@ -17,7 +24,6 @@ export const onClickGetTodo = async (e) => {
   const isLink = e.target.classList.contains('link');
   const todos = await getFolder(Name, isLink);
 
-  const todoList = document.querySelector('.todoList');
   //initialize todo List
   while (todoList.firstChild) {
     todoList.firstChild.remove();
@@ -27,13 +33,8 @@ export const onClickGetTodo = async (e) => {
   }
 };
 
-export const displayTodo = (todo, todoList) => {
-  const newTodo = `
-        <li>${todo}
-            <i class="fas fa-times"></i>
-        </li>
-    `;
-  todoList.insertAdjacentHTML('beforeend', newTodo);
+export const displayTodo = (todo) => {
+  todoList.insertAdjacentHTML('beforeend', newTodo(todo));
 
   const deletebtn = todoList.lastElementChild.lastElementChild;
   deletebtn.addEventListener('click', deleteTodo);
@@ -43,10 +44,14 @@ const deleteTodo = async (e) => {
   console.log(e.target);
 };
 
-export const addTodo = (e) => {
+export const onSubmitTodo = (e) => {
   e.preventDefault();
-  const value = todoForm.firstElementChild.value;
-  console.log(value);
+  let input = todoForm.firstElementChild;
+  const folderName = document.querySelector('.selected').innerText;
+
+  addTodo(input.value, folderName);
+  displayTodo(input.value);
+  input.value = '';
 };
 
-todoForm.addEventListener('submit', addTodo);
+todoForm.addEventListener('submit', onSubmitTodo);
