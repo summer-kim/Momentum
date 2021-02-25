@@ -17,11 +17,15 @@ const makeElement = (isLink, value) => {
   );
   return newElement;
 };
-const targetIsLink = (target) => target.classList.contains('link');
+export const targetIsLink = (target) => target.classList.contains('link');
 
 //parent node of Folders and Links
 const linkParents = document.querySelector('.links');
 const folderParents = document.querySelector('.folders');
+
+//
+//
+//function fired when DOMContentLoaded
 
 const init = async () => {
   //button to spread Folders and Links

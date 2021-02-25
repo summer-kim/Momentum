@@ -1,4 +1,5 @@
 import { getFolder, addTodo } from './getTodo.js';
+import { targetIsLink } from './displayFolder.js';
 
 const todoForm = document.querySelector('.todoForm');
 const todoTitle = document.querySelector('.todo-title');
@@ -47,9 +48,12 @@ const deleteTodo = async (e) => {
 export const onSubmitTodo = (e) => {
   e.preventDefault();
   let input = todoForm.firstElementChild;
-  const folderName = document.querySelector('.selected').innerText;
 
-  addTodo(input.value, folderName);
+  const element = document.querySelector('.selected');
+  const Name = element.innerText;
+  const isLink = targetIsLink(element);
+
+  addTodo(input.value, Name, isLink);
   displayTodo(input.value);
   input.value = '';
 };
