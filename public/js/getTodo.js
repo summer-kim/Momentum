@@ -9,6 +9,20 @@ export const setFolder = async (Name, isLink) => {
   }
 };
 
+export const getFolder = async (Name, isLink) => {
+  const url = `/data/get/${isLink ? 'link' : 'folder'}/${Name}`;
+  console.log('url :' + url);
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    console.log('data :' + data);
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const getInitialData = async () => {
   const url = `/data/get/initData`;
 

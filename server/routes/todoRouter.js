@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { auth, db } = require('../db');
 
+//Set new Folder
 router.get('/data/folder/:folderName', async (req, res) => {
   try {
     const user = auth.currentUser;
@@ -17,6 +18,7 @@ router.get('/data/folder/:folderName', async (req, res) => {
   }
 });
 
+//Set new Link
 router.get('/data/link/:linkName', async (req, res) => {
   try {
     const user = auth.currentUser;
@@ -32,6 +34,7 @@ router.get('/data/link/:linkName', async (req, res) => {
   }
 });
 
+//Get initial Data when User Logged in
 router.get('/data/get/initData', async (req, res) => {
   const data = { links: {}, folders: {} };
   try {
@@ -51,6 +54,44 @@ router.get('/data/get/initData', async (req, res) => {
       }
     });
     return res.json(data);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
+//Get specific Folder
+router.get('/data/get/folder/:folderName', async (req, res) => {
+  try {
+    const user = auth.currentUser;
+    const folderName = req.params.folderName;
+
+    const doc = await db.collection(user.displayName).doc('folders').get();
+
+    if (doc.exists) {
+      const folders = doc.data();
+      return res.json(folders[folderName]);
+    } else {
+      return res.json({ msg: 'No folder matched' });
+    }
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
+//Get specific Link
+router.get('/data/get/link/:linkName', async (req, res) => {
+  try {
+    const user = auth.currentUser;
+    const linkName = req.params.linkName;
+
+    const doc = await db.collection(user.displayName).doc('links').get();
+
+    if (doc.exists) {
+      const links = doc.data();
+      return res.json(links[linkName]);
+    } else {
+      return res.json({ msg: 'No folder matched' });
+    }
   } catch (error) {
     res.status(400).send(error.message);
   }
