@@ -1,17 +1,9 @@
- <div class="container flex-col">
+<div class="container flex-col">
     <h4 class="greeting">Welcome, {{userName}}</h4>
     <form class="todoForm">
-      <input type="text" placeholder="To do" />
+        <input type="text" placeholder="To do" />
     </form>
     <ul class="todoList"></ul>
-  </div>
+</div>
 
-  <script>
-    const onClickGetTodo = (e) =>{
-    const selectedBefore = document.querySelector('.selected')
-    if(selectedBefore){
-      selectedBefore.classList.remove('selected')
-    }
-    e.target.classList.add('selected')
-  }
-  </script>
+  <script type="module" src="./js/displayTodos.js"></script>
