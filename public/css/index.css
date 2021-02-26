@@ -211,13 +211,17 @@ section {
 .selected {
   background: var(--main-color);
 }
-.logout {
+.buttons {
+  display: flex;
   position: absolute;
   right: 0;
   bottom: 0;
   margin: 0.5rem;
 }
-.logout-btn {
+
+.logout-btn,
+.deleteFolder {
+  margin: 0 3px;
   padding: 0.5rem 1rem;
   font-size: 18px;
   background: transparent;
@@ -227,9 +231,11 @@ section {
   color: var(--font-color);
   transition: background-color 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.logout-btn:hover {
+.logout-btn:hover,
+.deleteFolder:hover {
   background-color: var(--main-color);
 }
+
 .bgImage {
   position: absolute;
   top: 0px;

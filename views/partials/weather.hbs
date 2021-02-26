@@ -99,7 +99,8 @@
       const { error = '', current = '', location = '' } = await res.json();
 
       if (error) {
-        return window.alert('Enter a vaild name of city' );
+        console.log(error)
+        return window.alert(error.info);
       }
 
       const data = {
