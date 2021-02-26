@@ -11,16 +11,21 @@ export const getInitialData = async () => {
 };
 
 //make new Folder or Link
-export const setFolder = async (Name, isLink) => {
+export const setFolder = async (folderName, isLink) => {
   const url = '/data/folder/set';
+  const docName = isLink ? 'links' : 'folders';
   const config = {
     method: 'POST',
-    body: JSON.stringify({ folderName: Name, docName: isLink ? true : false }),
-    'Content-Type': 'application/json',
+    body: JSON.stringify({ folderName, docName }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   };
 
   try {
-    await fetch(url, config);
+    const res = await fetch(url, config);
+    const data = await res.json();
+    console.log(data);
   } catch (err) {
     console.log(err);
   }
@@ -28,7 +33,8 @@ export const setFolder = async (Name, isLink) => {
 
 //Get a Folder or Link
 export const getFolder = async (folderName, isLink) => {
-  const url = `/data/folder/get/${folderName}/${isLink ? 'links' : 'folders'}`;
+  const docName = isLink ? 'links' : 'folders';
+  const url = `/data/folder/get/${folderName}/${docName}`;
 
   try {
     const res = await fetch(url);
@@ -40,18 +46,23 @@ export const getFolder = async (folderName, isLink) => {
 };
 
 //make new Todo in the Folder or Link
-export const addTodo = async (value, Name, isLink) => {
+export const addTodo = async (value, folderName, isLink) => {
   const url = '/data/todo/add';
+  const docName = isLink ? 'links' : 'folders';
+  console.log(folderName, docName);
+
   const config = {
     method: 'POST',
-    body: JSON.stringify({ todo: value, Name, docName: isLink ? true : false }),
+    body: JSON.stringify({ todo: value, folderName, docName }),
     headers: {
       'Content-Type': 'application/json',
     },
   };
 
   try {
-    await fetch(url, config);
+    const res = await fetch(url, config);
+    const data = await res.json();
+    console.log(data);
     return;
   } catch (err) {
     console.log(err);
@@ -59,9 +70,9 @@ export const addTodo = async (value, Name, isLink) => {
 };
 
 //Delete Folder or Link
-export const deleteFolder = async (Name, isLink) => {
+export const deleteFolder = async (folderName, isLink) => {
   const docName = isLink ? 'links' : 'folders';
-  const url = `/data/folder/delete/${Name}/${docName}`;
+  const url = `/data/folder/delete/${folderName}/${docName}`;
 
   try {
     await fetch(url);

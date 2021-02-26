@@ -27,12 +27,13 @@ router.get('/data/get/initData', async (req, res) => {
   }
 });
 
-//Set new Folder or Link
+//Set a new Folder or Link
 router.post('/data/folder/set', async (req, res) => {
+  const user = auth.currentUser;
+  const { folderName, docName } = req.body;
   try {
-    const user = auth.currentUser;
-    const { folderName, docName } = req.body;
-
+    console.log(req.body);
+    console.log(folderName, docName);
     await db
       .collection(user.displayName)
       .doc(docName)
@@ -67,13 +68,13 @@ router.get('/data/folder/get/:folderName/:docName', async (req, res) => {
 router.post('/data/todo/add', async (req, res) => {
   try {
     const user = auth.currentUser;
-    const { Name, todo, docName } = req.body;
+    const { folderName, todo, docName } = req.body;
     let folder = [];
 
     const doc = await db.collection(user.displayName).doc(docName).get();
     if (doc.exists) {
       const folders = doc.data();
-      folder = folders[Name];
+      folder = folders[folderName];
       folder.push(todo);
     } else {
       return res.json({ msg: 'No Link/Folder matched' });
@@ -82,7 +83,7 @@ router.post('/data/todo/add', async (req, res) => {
     await db
       .collection(user.displayName)
       .doc(docName)
-      .update({ [Name]: folder });
+      .update({ [folderName]: folder });
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -94,7 +95,7 @@ router.get('/data/folder/delete/:folderName/:docName', async (req, res) => {
     const user = auth.currentUser;
     const folderName = req.params.folderName;
     const docName = req.params.docName;
-    console.log(folderName, docName);
+
     await db
       .collection(user.displayName)
       .doc(docName)
