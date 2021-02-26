@@ -12,24 +12,25 @@ const newTodo = (todo) => `
     `;
 
 export const onClickGetTodo = async (e) => {
+  const folder = e.target;
   const selectedBefore = document.querySelector('.selected');
   if (selectedBefore) {
     selectedBefore.classList.remove('selected');
   }
-  e.target.classList.add('selected');
+  folder.classList.add('selected');
   todoForm.classList.remove('dp-none');
-  const Name = e.target.innerText;
+  const Name = folder.innerText;
 
   todoTitle.innerText = Name;
 
-  const isLink = e.target.classList.contains('link');
+  const isLink = targetIsLink(folder);
   const todos = await getFolder(Name, isLink);
 
   //initialize todo List
   while (todoList.firstChild) {
     todoList.firstChild.remove();
   }
-  if (todos.length > 0) {
+  if (todos && todos.length > 0) {
     todos.forEach((todo) => displayTodo(todo, todoList));
   }
 };

@@ -2,38 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { auth, db } = require('../db');
 
-//Set new Folder
-router.get('/data/folder/:folderName', async (req, res) => {
-  try {
-    const user = auth.currentUser;
-    const folderName = req.params.folderName;
-
-    await db
-      .collection(user.displayName)
-      .doc('folders')
-      .set({ [folderName]: [] }, { merge: true });
-    return res.json({ msg: 'set Folder Successfully' });
-  } catch (error) {
-    res.status(400).send(error.message);
-  }
-});
-
-//Set new Link
-router.get('/data/link/:linkName', async (req, res) => {
-  try {
-    const user = auth.currentUser;
-    const linkName = req.params.linkName;
-
-    await db
-      .collection(user.displayName)
-      .doc('links')
-      .set({ [linkName]: [] }, { merge: true });
-    return res.json({ msg: 'set Link Successfully' });
-  } catch (error) {
-    res.status(400).send(error.message);
-  }
-});
-
 //Get initial Data when User Logged in
 router.get('/data/get/initData', async (req, res) => {
   const data = { links: {}, folders: {} };
@@ -59,38 +27,36 @@ router.get('/data/get/initData', async (req, res) => {
   }
 });
 
-//Get specific Folder
-router.get('/data/get/folder/:folderName', async (req, res) => {
+//Set new Folder or Link
+router.post('/data/folder/set', async (req, res) => {
   try {
     const user = auth.currentUser;
-    const folderName = req.params.folderName;
+    const { folderName, isLink } = req.body;
 
-    const doc = await db.collection(user.displayName).doc('folders').get();
-
-    if (doc.exists) {
-      const folders = doc.data();
-      return res.json(folders[folderName]);
-    } else {
-      return res.json({ msg: 'No folder matched' });
-    }
+    await db
+      .collection(user.displayName)
+      .doc(isLink ? 'links' : 'folders')
+      .set({ [folderName]: [] }, { merge: true });
+    return res.json({ msg: 'set Link/Folder Successfully' });
   } catch (error) {
     res.status(400).send(error.message);
   }
 });
 
-//Get specific Link
-router.get('/data/get/link/:linkName', async (req, res) => {
+//Get specific Folder
+router.get('/data/folder/get/:folderName/:docName', async (req, res) => {
   try {
     const user = auth.currentUser;
-    const linkName = req.params.linkName;
+    const folderName = req.params.folderName;
+    const docName = req.params.docName;
 
-    const doc = await db.collection(user.displayName).doc('links').get();
+    const doc = await db.collection(user.displayName).doc(docName).get();
 
     if (doc.exists) {
-      const links = doc.data();
-      return res.json(links[linkName]);
+      const folders = doc.data();
+      return res.json(folders[folderName]);
     } else {
-      return res.json({ msg: 'No folder matched' });
+      return res.json({ msg: 'No link/folder matched' });
     }
   } catch (error) {
     res.status(400).send(error.message);
@@ -98,12 +64,11 @@ router.get('/data/get/link/:linkName', async (req, res) => {
 });
 
 //Add todo to specific Folder
-router.post('/data/add', async (req, res) => {
+router.post('/data/todo/add', async (req, res) => {
   try {
     const user = auth.currentUser;
     const { Name, todo, isLink } = req.body;
     let folder = [];
-
     const link_or_folder = isLink ? 'links' : 'folders';
 
     const doc = await db.collection(user.displayName).doc(link_or_folder).get();
