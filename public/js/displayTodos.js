@@ -1,9 +1,11 @@
-import { getFolder, addTodo } from './getTodo.js';
+import { getFolder, addTodo, deleteFolder } from './getTodo.js';
 import { targetIsLink } from './displayFolder.js';
 
 const todoForm = document.querySelector('.todoForm');
 const todoTitle = document.querySelector('.todo-title');
 const todoList = document.querySelector('.todoList');
+
+const deleteFolderForm = document.querySelector('.deleteFolder');
 
 const newTodo = (todo) => `
         <li>${todo}
@@ -33,6 +35,13 @@ export const onClickGetTodo = async (e) => {
   if (todos && todos.length > 0) {
     todos.forEach((todo) => displayTodo(todo, todoList));
   }
+
+  deleteFolderForm.classList.remove('dp-none');
+  const deleteButton = deleteFolderForm.firstElementChild;
+  const icon = isLink
+    ? "<i class='fas fa-link'></i>"
+    : "<i class='far fa-folder-open'></i>";
+  deleteButton.innerHTML = `DELETE ${Name} ` + icon;
 };
 
 export const displayTodo = (todo) => {
@@ -59,4 +68,25 @@ export const onSubmitTodo = (e) => {
   input.value = '';
 };
 
+const onSubmitDeleteFolder = async (e) => {
+  e.preventDefault();
+  const folderselected = document.querySelector('.selected');
+  const folderName = folderselected.innerHTML;
+  const isLink = targetIsLink(folderselected);
+  console.log(folderName);
+  try {
+    await deleteFolder(folderName, isLink);
+
+    while (todoList.firstChild) {
+      todoList.firstChild.remove();
+    }
+    folderselected.remove();
+    todoTitle.innerText = 'Click your Menu!';
+    deleteFolderForm.classList.add('dp-none');
+    todoForm.classList.add('dp-none');
+  } catch (err) {
+    console.log(err);
+  }
+};
+deleteFolderForm.addEventListener('submit', onSubmitDeleteFolder);
 todoForm.addEventListener('submit', onSubmitTodo);

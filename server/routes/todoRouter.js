@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { auth, db } = require('../db');
+const { auth, db, firebase } = require('../db');
 
 //Get initial Data when User Logged in
 router.get('/data/get/initData', async (req, res) => {
@@ -31,11 +31,11 @@ router.get('/data/get/initData', async (req, res) => {
 router.post('/data/folder/set', async (req, res) => {
   try {
     const user = auth.currentUser;
-    const { folderName, isLink } = req.body;
+    const { folderName, docName } = req.body;
 
     await db
       .collection(user.displayName)
-      .doc(isLink ? 'links' : 'folders')
+      .doc(docName)
       .set({ [folderName]: [] }, { merge: true });
     return res.json({ msg: 'set Link/Folder Successfully' });
   } catch (error) {
@@ -67,11 +67,10 @@ router.get('/data/folder/get/:folderName/:docName', async (req, res) => {
 router.post('/data/todo/add', async (req, res) => {
   try {
     const user = auth.currentUser;
-    const { Name, todo, isLink } = req.body;
+    const { Name, todo, docName } = req.body;
     let folder = [];
-    const link_or_folder = isLink ? 'links' : 'folders';
 
-    const doc = await db.collection(user.displayName).doc(link_or_folder).get();
+    const doc = await db.collection(user.displayName).doc(docName).get();
     if (doc.exists) {
       const folders = doc.data();
       folder = folders[Name];
@@ -82,8 +81,26 @@ router.post('/data/todo/add', async (req, res) => {
 
     await db
       .collection(user.displayName)
-      .doc(link_or_folder)
+      .doc(docName)
       .update({ [Name]: folder });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
+//delete Folder or Link
+router.get('/data/folder/delete/:folderName/:docName', async (req, res) => {
+  try {
+    const user = auth.currentUser;
+    const folderName = req.params.folderName;
+    const docName = req.params.docName;
+    console.log(folderName, docName);
+    await db
+      .collection(user.displayName)
+      .doc(docName)
+      .update({
+        [folderName]: firebase.firestore.FieldValue.delete(),
+      });
   } catch (error) {
     res.status(400).send(error.message);
   }

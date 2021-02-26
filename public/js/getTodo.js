@@ -14,14 +14,13 @@ export const getInitialData = async () => {
 export const setFolder = async (Name, isLink) => {
   const url = '/data/folder/set';
   const config = {
-    method: 'POST', // or 'PUT'
-    body: JSON.stringify({ folderName: Name, isLink }),
+    method: 'POST',
+    body: JSON.stringify({ folderName: Name, docName: isLink ? true : false }),
     'Content-Type': 'application/json',
   };
 
   try {
-    const res = await fetch(url, config);
-    const data = await res.json();
+    await fetch(url, config);
   } catch (err) {
     console.log(err);
   }
@@ -44,8 +43,8 @@ export const getFolder = async (folderName, isLink) => {
 export const addTodo = async (value, Name, isLink) => {
   const url = '/data/todo/add';
   const config = {
-    method: 'POST', // or 'PUT'
-    body: JSON.stringify({ todo: value, Name, isLink }),
+    method: 'POST',
+    body: JSON.stringify({ todo: value, Name, docName: isLink ? true : false }),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -54,6 +53,18 @@ export const addTodo = async (value, Name, isLink) => {
   try {
     await fetch(url, config);
     return;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+//Delete Folder or Link
+export const deleteFolder = async (Name, isLink) => {
+  const docName = isLink ? 'links' : 'folders';
+  const url = `/data/folder/delete/${Name}/${docName}`;
+
+  try {
+    await fetch(url);
   } catch (err) {
     console.log(err);
   }

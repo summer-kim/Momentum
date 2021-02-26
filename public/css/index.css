@@ -189,6 +189,7 @@ section {
 .right-side > div:nth-child(1),
 .links > a:nth-child(1) {
   z-index: 1;
+  text-align: center !important;
 }
 .right-side > div,
 .links > a {
@@ -199,6 +200,12 @@ section {
   margin: 0.5rem 0;
   cursor: pointer;
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.right-side > div {
+  text-align: right;
+}
+.links > a {
+  text-align: left;
 }
 .FadeInOut {
   transform: translateY(-60px);
@@ -220,7 +227,7 @@ section {
 }
 
 .logout-btn,
-.deleteFolder {
+.deleteFolder button {
   margin: 0 3px;
   padding: 0.5rem 1rem;
   font-size: 18px;
@@ -231,8 +238,9 @@ section {
   color: var(--font-color);
   transition: background-color 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
 .logout-btn:hover,
-.deleteFolder:hover {
+.deleteFolder button:hover {
   background-color: var(--main-color);
 }
 
