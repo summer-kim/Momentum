@@ -1,4 +1,4 @@
-import { getFolder, addTodo, deleteFolder } from './getTodo.js';
+import { getFolder, fetchTodo, deleteFolder } from './getTodo.js';
 import { targetIsLink } from './displayFolder.js';
 
 const todoForm = document.querySelector('.todoForm');
@@ -48,11 +48,26 @@ export const displayTodo = (todo) => {
   todoList.insertAdjacentHTML('beforeend', newTodo(todo));
 
   const deletebtn = todoList.lastElementChild.lastElementChild;
-  deletebtn.addEventListener('click', deleteTodo);
+  deletebtn.addEventListener('click', onClickDeleteTodo);
 };
 
-const deleteTodo = async (e) => {
-  console.log(e.target);
+const onClickDeleteTodo = async (e) => {
+  const element = document.querySelector('.selected');
+
+  const folderName = element.innerText;
+  const isLink = targetIsLink(element);
+  const todo = e.target.parentElement;
+  try {
+    await fetchTodo({
+      method: 'delete',
+      todo: todo.innerText,
+      folderName,
+      isLink,
+    });
+    todo.remove();
+  } catch (err) {
+    console.log.g(err);
+  }
 };
 
 export const onSubmitTodo = (e) => {
@@ -60,10 +75,10 @@ export const onSubmitTodo = (e) => {
   let input = todoForm.firstElementChild;
 
   const element = document.querySelector('.selected');
-  const Name = element.innerText;
+  const folderName = element.innerText;
   const isLink = targetIsLink(element);
 
-  addTodo(input.value, Name, isLink);
+  fetchTodo({ method: 'add', todo: input.value, folderName, isLink });
   displayTodo(input.value);
   input.value = '';
 };
@@ -73,7 +88,7 @@ const onSubmitDeleteFolder = async (e) => {
   const folderselected = document.querySelector('.selected');
   const folderName = folderselected.innerHTML;
   const isLink = targetIsLink(folderselected);
-  console.log(folderName);
+
   try {
     await deleteFolder(folderName, isLink);
 

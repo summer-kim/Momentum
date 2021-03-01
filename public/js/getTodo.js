@@ -45,15 +45,13 @@ export const getFolder = async (folderName, isLink) => {
   }
 };
 
-//make new Todo in the Folder or Link
-export const addTodo = async (value, folderName, isLink) => {
-  const url = '/data/todo/add';
+//ADD new Todo or DELETE Todo
+export const fetchTodo = async ({ method, todo, folderName, isLink }) => {
+  const url = `/data/todo/${method}`;
   const docName = isLink ? 'links' : 'folders';
-  console.log(folderName, docName);
-
   const config = {
-    method: 'POST',
-    body: JSON.stringify({ todo: value, folderName, docName }),
+    method: 'PUT',
+    body: JSON.stringify({ todo, folderName, docName }),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -62,8 +60,7 @@ export const addTodo = async (value, folderName, isLink) => {
   try {
     const res = await fetch(url, config);
     const data = await res.json();
-    console.log(data);
-    return;
+    return data;
   } catch (err) {
     console.log(err);
   }
@@ -75,7 +72,9 @@ export const deleteFolder = async (folderName, isLink) => {
   const url = `/data/folder/delete/${folderName}/${docName}`;
 
   try {
-    await fetch(url);
+    const res = await fetch(url);
+    const data = res.json(res);
+    return data;
   } catch (err) {
     console.log(err);
   }

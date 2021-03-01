@@ -32,8 +32,6 @@ router.post('/data/folder/set', async (req, res) => {
   const user = auth.currentUser;
   const { folderName, docName } = req.body;
   try {
-    console.log(req.body);
-    console.log(folderName, docName);
     await db
       .collection(user.displayName)
       .doc(docName)
@@ -65,7 +63,7 @@ router.get('/data/folder/get/:folderName/:docName', async (req, res) => {
 });
 
 //Add todo to specific Folder
-router.post('/data/todo/add', async (req, res) => {
+router.put('/data/todo/add', async (req, res) => {
   try {
     const user = auth.currentUser;
     const { folderName, todo, docName } = req.body;
@@ -95,13 +93,40 @@ router.get('/data/folder/delete/:folderName/:docName', async (req, res) => {
     const user = auth.currentUser;
     const folderName = req.params.folderName;
     const docName = req.params.docName;
-
     await db
       .collection(user.displayName)
       .doc(docName)
       .update({
         [folderName]: firebase.firestore.FieldValue.delete(),
       });
+    return res.json({ msg: 'successfully deleted' });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
+//delete todo
+router.put('/data/todo/delete', async (req, res) => {
+  const user = auth.currentUser;
+  const { folderName, docName, todo } = req.body;
+  let folder = [];
+
+  try {
+    const doc = await db.collection(user.displayName).doc(docName).get();
+    if (doc.exists) {
+      const folders = doc.data();
+      folder = folders[folderName];
+      const index = folder.indexOf(todo);
+      folder.splice(index, 1);
+    } else {
+      return res.json({ msg: 'No Link/Folder matched' });
+    }
+
+    await db
+      .collection(user.displayName)
+      .doc(docName)
+      .update({ [folderName]: folder });
+    return res.json({ msg: 'successfully deleted' });
   } catch (error) {
     res.status(400).send(error.message);
   }
