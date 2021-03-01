@@ -9,7 +9,8 @@ const deleteFolderForm = document.querySelector('.deleteFolder');
 
 const newTodo = (todo) => `
         <li>${todo}
-            <i class="fas fa-times"></i>
+          <i class="fas fa-check check"></i>
+          <i class="fas fa-times delete"></i>
         </li>
     `;
 
@@ -47,8 +48,11 @@ export const onClickGetTodo = async (e) => {
 export const displayTodo = (todo) => {
   todoList.insertAdjacentHTML('beforeend', newTodo(todo));
 
-  const deletebtn = todoList.lastElementChild.lastElementChild;
+  const deletebtn = todoList.lastElementChild.querySelector('.delete');
+  const checkbtn = todoList.lastElementChild.querySelector('.check');
+
   deletebtn.addEventListener('click', onClickDeleteTodo);
+  checkbtn.addEventListener('click', onClickCheckTodo);
 };
 
 const onClickDeleteTodo = async (e) => {
@@ -68,6 +72,12 @@ const onClickDeleteTodo = async (e) => {
   } catch (err) {
     console.log.g(err);
   }
+};
+
+const onClickCheckTodo = (e) => {
+  const todo = e.target.parentElement;
+  todo.classList.add('txt-check');
+  e.target.classList.add('checked');
 };
 
 export const onSubmitTodo = (e) => {
