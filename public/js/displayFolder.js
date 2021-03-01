@@ -9,6 +9,7 @@ const makeElement = (isLink, value) => {
 
   const newElement = document.createElement(element);
   newElement.classList.add(className);
+  value === addBtnIcon && newElement.classList.add('form-btn');
   newElement.innerHTML = value;
 
   newElement.addEventListener(
@@ -69,6 +70,11 @@ const formDisplay = (e) => {
       </form>
     `;
   button.addEventListener('submit', onSubmitFolder);
+
+  //if User click outside of Form, close Form
+  setTimeout(() => {
+    document.addEventListener('click', detectClickForm);
+  }, 100);
 };
 
 const onSubmitFolder = async (e) => {
@@ -85,6 +91,23 @@ const onSubmitFolder = async (e) => {
   parent.lastElementChild.remove(); //delete current button
   parent.append(makeElement(isLink, input)); //new Div(input)
   parent.append(makeElement(isLink, addBtnIcon)); //new Div(new button )
+
+  document.removeEventListener('click', detectClickForm);
+};
+
+const closeForm = (formDiv) => {
+  formDiv.innerHTML = addBtnIcon;
+  formDiv.addEventListener('click', formDisplay);
+  document.removeEventListener('click', detectClickForm);
+};
+
+const detectClickForm = (e) => {
+  const form = document.querySelector('.place-form');
+  if (!form) {
+    return;
+  }
+  const formDiv = form.parentElement;
+  !formDiv.contains(e.target) && closeForm(formDiv);
 };
 
 window.addEventListener('DOMContentLoaded', init);
