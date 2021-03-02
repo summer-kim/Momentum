@@ -64,7 +64,7 @@ const formDisplay = (e) => {
 
   //switch button to form
   button.innerHTML = `          
-     <form class="place-form">
+     <form class="place-form folder-btn">
         <input class="Input" type="text" placeholder="Enter the Name" name="folder" required=""/>
         <button type="submit">Submit</button>
       </form>
@@ -102,7 +102,7 @@ const closeForm = (formDiv) => {
 };
 
 const detectClickForm = (e) => {
-  const form = document.querySelector('.place-form');
+  const form = document.querySelector('.folder-btn');
   if (!form) {
     return;
   }
