@@ -7,12 +7,11 @@ const todoList = document.querySelector('.todoList');
 
 const deleteFolderForm = document.querySelector('.deleteFolder');
 
-const newTodo = (todo) => `
-        <li>${todo}
-          <i class="fas fa-check check"></i>
-          <i class="fas fa-times delete"></i>
-        </li>
-    `;
+const newTodo = (todo, isLink) =>
+  `<li>${todo}
+      ${!isLink ? `${'<i class="fas fa-check check"></i>'}` : ''}
+      <i class="fas fa-times delete"></i>
+    </li>`;
 
 export const onClickGetTodo = async (e) => {
   const folder = e.target;
@@ -22,37 +21,47 @@ export const onClickGetTodo = async (e) => {
   }
   folder.classList.add('selected');
   todoForm.classList.remove('dp-none');
-  const Name = folder.innerText;
-
-  todoTitle.innerText = Name;
 
   const isLink = targetIsLink(folder);
-  const todos = await getFolder(Name, isLink);
+  const folderName = folder.innerText;
+  todoTitle.innerText = folderName;
 
-  //initialize todo List
-  while (todoList.firstChild) {
-    todoList.firstChild.remove();
-  }
-  if (todos && todos.length > 0) {
-    todos.forEach((todo) => displayTodo(todo, todoList));
-  }
+  try {
+    const todos = await getFolder(folderName, isLink);
+    console.log(todos);
+    //initialize todo List
+    while (todoList.firstChild) {
+      todoList.firstChild.remove();
+    }
+    if (todos && todos.length > 0) {
+      todos.forEach((todo) => displayTodo(todo, isLink));
+    }
 
-  deleteFolderForm.classList.remove('dp-none');
-  const deleteButton = deleteFolderForm.firstElementChild;
-  const icon = isLink
-    ? "<i class='fas fa-link'></i>"
-    : "<i class='far fa-folder-open'></i>";
-  deleteButton.innerHTML = `DELETE ${Name} ` + icon;
+    deleteFolderForm.classList.remove('dp-none');
+    const deleteButton = deleteFolderForm.firstElementChild;
+    const icon = isLink
+      ? "<i class='fas fa-link'></i>"
+      : "<i class='far fa-folder-open'></i>";
+    deleteButton.innerHTML = `DELETE ${folderName} ${icon} `;
+  } catch (err) {
+    console.log.g(err);
+  }
 };
 
-export const displayTodo = (todo) => {
-  todoList.insertAdjacentHTML('beforeend', newTodo(todo));
+const displayTodo = (todo, isLink) => {
+  const todoText = isLink ? todo : todo.txt;
+  todoList.insertAdjacentHTML('beforeend', newTodo(todoText, isLink));
 
   const deletebtn = todoList.lastElementChild.querySelector('.delete');
-  const checkbtn = todoList.lastElementChild.querySelector('.check');
-
   deletebtn.addEventListener('click', onClickDeleteTodo);
-  checkbtn.addEventListener('click', onClickCheckTodo);
+  if (!isLink) {
+    const checkbtn = todoList.lastElementChild.querySelector('.check');
+    checkbtn.addEventListener('click', onClickCheckTodo);
+    if (todo.check) {
+      checkbtn.classList.add('checked');
+      checkbtn.parentElement.classList.add('txt-check');
+    }
+  }
 };
 
 const onClickDeleteTodo = async (e) => {
@@ -74,13 +83,24 @@ const onClickDeleteTodo = async (e) => {
   }
 };
 
-const onClickCheckTodo = (e) => {
+const onClickCheckTodo = async (e) => {
   const todo = e.target.parentElement;
-  todo.classList.add('txt-check');
-  e.target.classList.add('checked');
+  const element = document.querySelector('.selected');
+  const folderName = element.innerText;
+  try {
+    await fetchTodo({
+      method: 'change',
+      todo: todo.innerText,
+      folderName,
+    });
+    todo.classList.toggle('txt-check');
+    e.target.classList.toggle('checked');
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-export const onSubmitTodo = (e) => {
+const onSubmitTodo = (e) => {
   e.preventDefault();
   let input = todoForm.firstElementChild;
 
@@ -89,7 +109,11 @@ export const onSubmitTodo = (e) => {
   const isLink = targetIsLink(element);
 
   fetchTodo({ method: 'add', todo: input.value, folderName, isLink });
-  displayTodo(input.value);
+
+  const todo = {
+    txt: input.value,
+  };
+  displayTodo(isLink ? input.value : todo, isLink);
   input.value = '';
 };
 

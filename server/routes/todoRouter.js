@@ -73,7 +73,9 @@ router.put('/data/todo/add', async (req, res) => {
     if (doc.exists) {
       const folders = doc.data();
       folder = folders[folderName];
-      folder.push(todo);
+      docName === 'folders'
+        ? folder.push({ txt: todo, check: false })
+        : folder.push(todo);
     } else {
       return res.json({ msg: 'No Link/Folder matched' });
     }
@@ -116,8 +118,12 @@ router.put('/data/todo/delete', async (req, res) => {
     if (doc.exists) {
       const folders = doc.data();
       folder = folders[folderName];
-      const index = folder.indexOf(todo);
-      folder.splice(index, 1);
+      if (docName === 'folders') {
+        folder = folder.filter((list) => list.txt !== todo);
+      } else {
+        const index = folder.indexOf(todo);
+        folder.splice(index, 1);
+      }
     } else {
       return res.json({ msg: 'No Link/Folder matched' });
     }
@@ -131,4 +137,32 @@ router.put('/data/todo/delete', async (req, res) => {
     res.status(400).send(error.message);
   }
 });
+
+//change todo
+router.put('/data/todo/change', async (req, res) => {
+  try {
+    const user = auth.currentUser;
+    const { folderName, todo } = req.body;
+    let folder = [];
+
+    const doc = await db.collection(user.displayName).doc('folders').get();
+    if (doc.exists) {
+      const folders = doc.data();
+      folder = folders[folderName];
+      const index = folder.findIndex((list) => list.txt === todo);
+      folder[index].check = !folder[index].check;
+    } else {
+      return res.json({ msg: 'No Folder matched' });
+    }
+
+    await db
+      .collection(user.displayName)
+      .doc('folders')
+      .update({ [folderName]: folder });
+    return res.json({ msg: 'successfully changed' });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
 module.exports = { routes: router };

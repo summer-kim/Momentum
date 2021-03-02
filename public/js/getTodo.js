@@ -46,7 +46,12 @@ export const getFolder = async (folderName, isLink) => {
 };
 
 //ADD new Todo or DELETE Todo
-export const fetchTodo = async ({ method, todo, folderName, isLink }) => {
+export const fetchTodo = async ({
+  method,
+  todo,
+  folderName,
+  isLink = false,
+}) => {
   const url = `/data/todo/${method}`;
   const docName = isLink ? 'links' : 'folders';
   const config = {
