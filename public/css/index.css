@@ -56,14 +56,13 @@ section {
   top: 0;
   left: 0;
   color: var(--font-color);
-  width: 16vw;
 }
 .weather-side > div {
   width: 100%;
 }
 .info {
   position: relative;
-  min-height: 120px;
+  height: 100%;
   border: 2px solid var(--border-color);
   border-radius: 5px;
   padding: 0.5rem 1rem;
@@ -189,7 +188,7 @@ section {
   top: 0;
   right: 0;
   color: var(--font-color);
-  width: auto;
+  width: 12.5vw;
   z-index: 1;
   margin: 0.5rem;
 }
@@ -200,12 +199,24 @@ section {
 }
 
 .folders > div:nth-child(1),
-.links > a:nth-child(1) {
-  z-index: 1;
+.links > a:nth-child(1),
+.folders > div:nth-last-child(1),
+.links > a:nth-last-child(1) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.folders > div:nth-last-child(1),
+.links > a:nth-last-child(1) {
+  flex-direction: column;
+}
+.folders > div:nth-child(1) i,
+.links > a:nth-child(1) i {
+  margin-right: 5px;
+  color: var(--main-color);
 }
 .folders > div,
 .links > a {
-  height: 55px;
   border: 2px solid var(--border-color);
   border-radius: 5px;
   font-size: 1.5rem;
@@ -251,7 +262,15 @@ section {
 .deleteFolder button:hover {
   background-color: var(--main-color);
 }
+.deleteFolder button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.deleteFolder button i {
+  margin-left: 3px;
+}
 .bgImage {
   position: absolute;
   top: 0px;
@@ -293,26 +312,36 @@ section {
   }
   .nameForm input,
   .todoForm input {
-    width: 50vw;
+    width: 100%;
   }
   .todoList {
-    width: 60vw;
+    width: 80%;
+  }
+  .todo-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.5rem;
   }
   .weather-side {
-    width: 30vw;
+    display: none;
   }
-  .info .frame {
-    height: 100%;
-    width: 100%;
-    font-size: 0.7rem !important;
-  }
-  .parent {
-    width: 30vw;
+
+  .container {
+    margin: 0;
+    width: 70vw;
+    position: relative;
+    left: 0;
   }
   .container h1 {
     font-size: 1.2rem;
   }
-  .clock {
-    display: none;
+
+  .right-side,
+  .parent > a,
+  .parent > div {
+    width: 30vw;
+  }
+  .buttons,
+  button {
+    font-size: 0.8rem !important;
   }
 }
