@@ -20,10 +20,17 @@ const makeElement = (isLink, value) => {
 };
 export const targetIsLink = (target) => target.classList.contains('link');
 
+const appendElement = (arr, isLink) => {
+  arr.forEach((value) => {
+    const element = makeElement(isLink, value);
+    element.classList.add('dp-none');
+    isLink ? linkParents.append(element) : folderParents.append(element);
+  });
+};
+
 //parent node of Folders and Links
 const linkParents = document.querySelector('.links');
 const folderParents = document.querySelector('.folders');
-
 //
 //
 //function fired when DOMContentLoaded
@@ -37,24 +44,25 @@ const init = async () => {
   const FolderList = Object.keys(data.folders).concat([addBtnIcon]);
   const LinkList = Object.keys(data.links).concat([addBtnIcon]);
 
-  const appendElement = (arr, isLink) => {
-    arr.forEach((value) => {
-      const element = makeElement(isLink ? true : false, value);
-      element.classList.add('FadeInOut');
-      isLink ? linkParents.append(element) : folderParents.append(element);
-    });
-  };
   appendElement(LinkList, true);
   appendElement(FolderList, false);
 };
 
 //Interaction when User click "My Folders" or "My Links"
 const spreadFolder = (e) => {
-  const className = targetIsLink(e.currentTarget) ? 'link' : 'folder';
+  const isLink = targetIsLink(e.currentTarget);
+  const className = (isLink) => (isLink ? 'link' : 'folder');
+  const toggleFolder = (className) => {
+    const elements = document.querySelectorAll('.' + className);
+    const lists = Array.from(elements).slice(1); //except first Div = buttons to toggle
+    lists.forEach((element) => element.classList.toggle('dp-none'));
+  };
+  toggleFolder(className(isLink));
 
-  const elements = document.querySelectorAll('.' + className);
-  const lists = Array.from(elements).slice(1); //except first Div = buttons to toggle
-  lists.forEach((element) => element.classList.toggle('FadeInOut'));
+  const unSelected = document.querySelectorAll('.' + className(!isLink))[1];
+  if (!unSelected.classList.contains('dp-none')) {
+    toggleFolder(className(!isLink));
+  }
 };
 
 //when User click create Folder or create Link button

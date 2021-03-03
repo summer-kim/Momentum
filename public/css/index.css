@@ -6,6 +6,7 @@
   list-style: none;
   font-family: 'Nunito', sans-serif;
   text-decoration: none;
+  overflow: hidden;
 }
 body,
 html {
@@ -50,14 +51,14 @@ section {
   margin: auto;
   height: 100%;
 }
-.left-side {
+.weather-side {
   position: absolute;
   top: 0;
   left: 0;
   color: var(--font-color);
   width: 16vw;
 }
-.left-side > div {
+.weather-side > div {
   width: 100%;
 }
 .info {
@@ -148,9 +149,6 @@ section {
 .todoForm input:focus {
   border-color: var(--border-color);
 }
-.greeting {
-  font-size: 1.5rem;
-}
 .todoList {
   font-size: 1.5rem;
   width: 40vw;
@@ -185,23 +183,29 @@ section {
   text-decoration: line-through;
 }
 .right-side {
+  display: flex;
+  flex-direction: column;
   position: absolute;
   top: 0;
   right: 0;
   color: var(--font-color);
-  width: 16vw;
+  width: auto;
+  z-index: 1;
+  margin: 0.5rem;
 }
-.right-side > div:nth-last-child(1),
-.links > a:nth-last-child(1) {
+.right-side .parent {
+  min-width: 12vw;
   text-align: center;
+  transition: all 0.5s cubic-bezier(0.39, 0.575, 0.565, 1);
 }
-.right-side > div:nth-child(1),
+
+.folders > div:nth-child(1),
 .links > a:nth-child(1) {
   z-index: 1;
-  text-align: center !important;
 }
-.right-side > div,
+.folders > div,
 .links > a {
+  height: 55px;
   border: 2px solid var(--border-color);
   border-radius: 5px;
   font-size: 1.5rem;
@@ -210,17 +214,12 @@ section {
   cursor: pointer;
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
-.right-side > div {
-  text-align: right;
-}
-.links > a {
-  text-align: left;
-}
+
 .FadeInOut {
   transform: translateY(-60px);
   opacity: 0;
 }
-.right-side > div:hover,
+.folders > div:hover,
 .links > a:hover {
   background: var(--main-color);
 }
@@ -289,11 +288,31 @@ section {
 }
 
 @media screen and (max-width: 700px) {
+  * {
+    font-size: 1rem !important;
+  }
   .nameForm input,
   .todoForm input {
     width: 50vw;
   }
   .todoList {
     width: 60vw;
+  }
+  .weather-side {
+    width: 30vw;
+  }
+  .info .frame {
+    height: 100%;
+    width: 100%;
+    font-size: 0.7rem !important;
+  }
+  .parent {
+    width: 30vw;
+  }
+  .container h1 {
+    font-size: 1.2rem;
+  }
+  .clock {
+    display: none;
   }
 }
