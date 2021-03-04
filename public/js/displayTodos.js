@@ -48,7 +48,7 @@ export const onClickGetTodo = async (e) => {
       : "<i class='far fa-folder-open'></i>";
     deleteButton.innerHTML = `DELETE ${folderName} ${icon} `;
   } catch (err) {
-    console.log.g(err);
+    console.log(err);
   }
 };
 

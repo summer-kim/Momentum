@@ -5,6 +5,8 @@ const { auth } = require('../db');
 router.get('/login', (req, res) => {
   res.render('login', {
     style: 'login',
+    isRegister: false,
+    link: '/login',
   });
 });
 
@@ -21,6 +23,8 @@ router.post('/login', async (req, res) => {
     res.status(400).render('login', {
       err: err.message,
       style: 'login',
+      isRegister: false,
+      link: '/login',
     });
   }
 });
@@ -35,8 +39,10 @@ router.get('/login/logout', async (req, res) => {
 });
 
 router.get('/register', (req, res) => {
-  res.render('register', {
+  res.render('login', {
     style: 'login',
+    isRegister: true,
+    link: '/register',
   });
 });
 
@@ -53,9 +59,11 @@ router.post('/register', async (req, res) => {
       }
     });
   } catch (err) {
-    res.status(400).render('register', {
+    res.status(400).render('login', {
       err: err.message,
       style: 'login',
+      isRegister: true,
+      link: '/register',
     });
   }
 });

@@ -1,7 +1,19 @@
 <section class="login">
-    <h1 class="large text-primary">Sign In</h1>
+    <h1 class="large text-primary">
+        {{#if isRegister}}Sign Up
+        {{else}}Sign In
+        {{/if}}
+    </h1>
     <p class="lead"><i class="fas fa-user"></i> Sign into Your Account</p>
-    <form class="login-form" action="/login" method="POST">
+    <form class="login-form" action="{{link}}" method="POST">
+        {{#if isRegister}}
+        <input
+            type="name"
+            placeholder="Your display Name"
+            name="userName"
+            required=""
+        />
+        {{/if}}
         <input
             type="email"
             placeholder="Email Address"
@@ -15,10 +27,28 @@
             name="password"
             required=""
         />
-        <input type="submit" class="login-btn" value="Login" />
+        {{#if isRegister}}
+        <input
+            type="password"
+            placeholder="Confirm Password"
+            name="password2"
+            required=""
+        />
+        {{/if}}
+        <input type="submit" class="login-btn" id="submitType" />
     </form>
     <p>
-        Don't have an account? 
+        {{#if isRegister}}Already have an account?
+        {{else}}Don't have an account? 
+        {{/if}}
     </p>
-    <a href="/register" class="large switch">Sign Up</a>
+    {{#if isRegister}}<a href="/login" class="large switch"> Sign In </a>
+    {{else}}<a href="/register" class="large switch"> Sign Up </a>
+    {{/if}}
 </section>
+<script>
+    const submitType = document.querySelector('#submitType')
+    let type= "{{link}}"
+
+    submitType.value = type.substring(1).toUpperCase()
+</script>
