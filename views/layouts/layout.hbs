@@ -5,7 +5,6 @@
 
   <body>
 
-    {{#if msg}}<div class="err">{{msg}}</div>{{/if}}
     {{{body}}}
     
     
@@ -17,13 +16,13 @@
 
 
   </body>
-  <script>
-    const errMsg = document.querySelector('.err')
-    const lifter = () =>{
-      setTimeout(()=> errMsg.style.transform = 'translateY(-50px)', 4500) 
-    }
-    if(errMsg){
-    errMsg.addEventListener('load', lifter)
-    }
-  </script>
 </html>
+<script type="module">
+  import { errAlert } from './js/errAlert.js'
+
+  const errMessage = "{{err}}"
+  if(errMessage){
+    console.log(errMessage)
+    errAlert(errMessage, 4000)
+  }
+</script>

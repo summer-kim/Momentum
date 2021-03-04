@@ -1,5 +1,6 @@
 import { setFolder, getInitialData } from './getTodo.js';
 import { onClickGetTodo } from './displayTodos.js';
+import { errAlert } from './errAlert.js';
 
 //Ingredient for make new Folder element or Link element
 const addBtnIcon = '<i class="fas fa-plus emoji-plus "></i>';
@@ -59,6 +60,7 @@ const spreadFolder = (e) => {
   };
   toggleFolder(className(isLink));
 
+  //if other unselected folder/link is open, automatically close them
   const unSelected = document.querySelectorAll('.' + className(!isLink))[1];
   if (!unSelected.classList.contains('dp-none')) {
     toggleFolder(className(!isLink));
@@ -68,6 +70,18 @@ const spreadFolder = (e) => {
 //when User click create Folder or create Link button
 const formDisplay = (e) => {
   const button = e.currentTarget;
+  const isLink = targetIsLink(button);
+
+  //limit the maximum number of folder/link
+  const numberOfFolder = document.querySelector(
+    `.${isLink ? 'links' : 'folders'}`
+  ).childElementCount;
+
+  if (numberOfFolder >= 7) {
+    errAlert('Maximum Number of Folder/Link is 5', 3500);
+    return;
+  }
+
   button.removeEventListener('click', formDisplay);
 
   //switch button to form
