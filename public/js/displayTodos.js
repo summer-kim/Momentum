@@ -1,5 +1,6 @@
-import { getFolder, fetchTodo, deleteFolder } from './getTodo.js';
+import { getFolder, fetchTodo, deleteFolder } from './fetch/getTodo.js';
 import { targetIsLink } from './displayFolder.js';
+import { errAlert } from './errAlert.js';
 
 const todoForm = document.querySelector('.todoForm');
 const todoTitle = document.querySelector('.todo-title');
@@ -28,7 +29,10 @@ export const onClickGetTodo = async (e) => {
 
   try {
     const todos = await getFolder(folderName, isLink);
-    console.log(todos);
+    if (todos.errMsg) {
+      errAlert(todos.errMsg, 3500);
+      return;
+    }
     //initialize todo List
     while (todoList.firstChild) {
       todoList.firstChild.remove();
@@ -71,15 +75,19 @@ const onClickDeleteTodo = async (e) => {
   const isLink = targetIsLink(element);
   const todo = e.target.parentElement;
   try {
-    await fetchTodo({
+    const data = await fetchTodo({
       method: 'delete',
       todo: todo.innerText,
       folderName,
       isLink,
     });
+    if (data.errMsg) {
+      errAlert(data.errMsg, 3500);
+      return;
+    }
     todo.remove();
   } catch (err) {
-    console.log.g(err);
+    console.log(err);
   }
 };
 
@@ -88,11 +96,16 @@ const onClickCheckTodo = async (e) => {
   const element = document.querySelector('.selected');
   const folderName = element.innerText;
   try {
-    await fetchTodo({
+    const data = await fetchTodo({
       method: 'change',
       todo: todo.innerText,
       folderName,
     });
+    if (data.errMsg) {
+      errAlert(data.errMsg, 3500);
+      return;
+    }
+
     todo.classList.toggle('txt-check');
     e.target.classList.toggle('checked');
   } catch (err) {
@@ -124,7 +137,11 @@ const onSubmitDeleteFolder = async (e) => {
   const isLink = targetIsLink(folderselected);
 
   try {
-    await deleteFolder(folderName, isLink);
+    const data = await deleteFolder(folderName, isLink);
+    if (data.errMsg) {
+      errAlert(data.errMsg, 3500);
+      return;
+    }
 
     while (todoList.firstChild) {
       todoList.firstChild.remove();

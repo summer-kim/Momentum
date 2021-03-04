@@ -18,8 +18,10 @@ router.post('/login', async (req, res) => {
       }
     });
   } catch (err) {
-    res.status(400).json({ msg: err.message });
-    return res.redirect('/login');
+    res.status(400).render('login', {
+      err: err.message,
+      style: 'login',
+    });
   }
 });
 
@@ -28,7 +30,7 @@ router.get('/login/logout', async (req, res) => {
     await auth.signOut();
     res.redirect('/login');
   } catch (err) {
-    res.status(400).json({ msg: err.message });
+    return res.redirect('/');
   }
 });
 

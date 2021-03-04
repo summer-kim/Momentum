@@ -5,8 +5,9 @@ const { auth, db, firebase } = require('../db');
 //Get initial Data when User Logged in
 router.get('/data/get/initData', async (req, res) => {
   const data = { links: {}, folders: {} };
+  const user = auth.currentUser;
+
   try {
-    const user = auth.currentUser;
     const docs = await db.collection(user.displayName).get();
 
     docs.forEach((doc) => {
@@ -23,7 +24,7 @@ router.get('/data/get/initData', async (req, res) => {
     });
     return res.json(data);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ errMsg: error.message });
   }
 });
 
@@ -31,24 +32,26 @@ router.get('/data/get/initData', async (req, res) => {
 router.post('/data/folder/set', async (req, res) => {
   const user = auth.currentUser;
   const { folderName, docName } = req.body;
+
   try {
     await db
       .collection(user.displayName)
       .doc(docName)
       .set({ [folderName]: [] }, { merge: true });
+
     return res.json({ msg: 'set Link/Folder Successfully' });
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ errMsg: error.message });
   }
 });
 
 //Get specific Folder
 router.get('/data/folder/get/:folderName/:docName', async (req, res) => {
-  try {
-    const user = auth.currentUser;
-    const folderName = req.params.folderName;
-    const docName = req.params.docName;
+  const user = auth.currentUser;
+  const folderName = req.params.folderName;
+  const docName = req.params.docName;
 
+  try {
     const doc = await db.collection(user.displayName).doc(docName).get();
 
     if (doc.exists) {
@@ -58,18 +61,19 @@ router.get('/data/folder/get/:folderName/:docName', async (req, res) => {
       return res.json({ msg: 'No link/folder matched' });
     }
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ errMsg: error.message });
   }
 });
 
 //Add todo to specific Folder
 router.put('/data/todo/add', async (req, res) => {
-  try {
-    const user = auth.currentUser;
-    const { folderName, todo, docName } = req.body;
-    let folder = [];
+  const user = auth.currentUser;
+  const { folderName, todo, docName } = req.body;
+  let folder = [];
 
+  try {
     const doc = await db.collection(user.displayName).doc(docName).get();
+
     if (doc.exists) {
       const folders = doc.data();
       folder = folders[folderName];
@@ -85,16 +89,17 @@ router.put('/data/todo/add', async (req, res) => {
       .doc(docName)
       .update({ [folderName]: folder });
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ errMsg: error.message });
   }
 });
 
 //delete Folder or Link
 router.get('/data/folder/delete/:folderName/:docName', async (req, res) => {
+  const user = auth.currentUser;
+  const folderName = req.params.folderName;
+  const docName = req.params.docName;
+
   try {
-    const user = auth.currentUser;
-    const folderName = req.params.folderName;
-    const docName = req.params.docName;
     await db
       .collection(user.displayName)
       .doc(docName)
@@ -103,7 +108,7 @@ router.get('/data/folder/delete/:folderName/:docName', async (req, res) => {
       });
     return res.json({ msg: 'successfully deleted' });
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ errMsg: error.message });
   }
 });
 
@@ -134,18 +139,19 @@ router.put('/data/todo/delete', async (req, res) => {
       .update({ [folderName]: folder });
     return res.json({ msg: 'successfully deleted' });
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ errMsg: error.message });
   }
 });
 
 //change todo
 router.put('/data/todo/change', async (req, res) => {
-  try {
-    const user = auth.currentUser;
-    const { folderName, todo } = req.body;
-    let folder = [];
+  const user = auth.currentUser;
+  const { folderName, todo } = req.body;
+  let folder = [];
 
+  try {
     const doc = await db.collection(user.displayName).doc('folders').get();
+
     if (doc.exists) {
       const folders = doc.data();
       folder = folders[folderName];
@@ -161,7 +167,7 @@ router.put('/data/todo/change', async (req, res) => {
       .update({ [folderName]: folder });
     return res.json({ msg: 'successfully changed' });
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ errMsg: error.message });
   }
 });
 

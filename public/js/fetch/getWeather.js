@@ -2,7 +2,9 @@ export const setWeather = async (city) => {
   const url = '/data/weather/' + city;
 
   try {
-    await fetch(url);
+    const res = await fetch(url);
+    const data = await res.json();
+    return data;
   } catch (err) {
     console.log(err);
   }

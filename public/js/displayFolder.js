@@ -1,4 +1,4 @@
-import { setFolder, getInitialData } from './getTodo.js';
+import { setFolder, getInitialData } from './fetch/getTodo.js';
 import { onClickGetTodo } from './displayTodos.js';
 import { errAlert } from './errAlert.js';
 
@@ -42,6 +42,10 @@ const init = async () => {
   spreadButtons.forEach((btn) => btn.addEventListener('click', spreadFolder));
 
   const data = await getInitialData();
+  if (data.errMsg) {
+    errAlert(data.errMsg, 3500);
+    return;
+  }
   const FolderList = Object.keys(data.folders).concat([addBtnIcon]);
   const LinkList = Object.keys(data.links).concat([addBtnIcon]);
 
@@ -106,7 +110,11 @@ const onSubmitFolder = async (e) => {
 
   //send data to different Router depends on Links or Folders
   const isLink = targetIsLink(button);
-  await setFolder(input, isLink);
+  const data = await setFolder(input, isLink);
+  if (data.errMsg) {
+    errAlert(data.errMsg, 3500);
+    return;
+  }
 
   const parent = isLink ? linkParents : folderParents;
 

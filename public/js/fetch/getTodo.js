@@ -7,6 +7,7 @@ export const getInitialData = async () => {
     return data;
   } catch (err) {
     console.log(err);
+    return { err: err.msg };
   }
 };
 
@@ -25,9 +26,10 @@ export const setFolder = async (folderName, isLink) => {
   try {
     const res = await fetch(url, config);
     const data = await res.json();
-    console.log(data);
+    return data;
   } catch (err) {
     console.log(err);
+    return { err: err.msg };
   }
 };
 
@@ -42,6 +44,7 @@ export const getFolder = async (folderName, isLink) => {
     return data;
   } catch (err) {
     console.log(err);
+    return { err: err.msg };
   }
 };
 
@@ -68,6 +71,7 @@ export const fetchTodo = async ({
     return data;
   } catch (err) {
     console.log(err);
+    return { err: err.msg };
   }
 };
 
@@ -82,5 +86,6 @@ export const deleteFolder = async (folderName, isLink) => {
     return data;
   } catch (err) {
     console.log(err);
+    return { err: err.msg };
   }
 };
