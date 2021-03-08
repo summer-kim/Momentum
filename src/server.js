@@ -1,4 +1,5 @@
 const express = require('express');
+const serverless = require('serverless-http');
 const app = express();
 const hbs = require('express-handlebars');
 const path = require('path');
@@ -39,6 +40,11 @@ app.get('/', checkAuth, (req, res) => {
   });
 });
 
+app.use(`/.netlify/functions/api`);
+
 app.listen(PORT, () => {
   console.log(`Server started on Port ${PORT}`);
 });
+
+module.exports = app;
+module.exports.handler = serverless(app);
