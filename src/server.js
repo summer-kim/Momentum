@@ -13,6 +13,9 @@ const authRouter = require('./server/routes/authRouter');
 const weatherRouter = require('./server/routes/weatherRouter');
 const todoRouter = require('./server/routes/todoRouter');
 
+const dotenv = require('dotenv');
+dotenv.config({ path: path.join(__dirname, '../.env') });
+
 app.set('view engine', 'hbs');
 app.engine(
   'hbs',
@@ -39,8 +42,6 @@ app.get('/', checkAuth, (req, res) => {
     userName: req.user.displayName,
   });
 });
-
-app.use(`/.netlify/functions/api`);
 
 app.listen(PORT, () => {
   console.log(`Server started on Port ${PORT}`);
