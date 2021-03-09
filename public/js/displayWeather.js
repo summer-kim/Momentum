@@ -1,4 +1,4 @@
-import { setWeather, getWeather } from './fetch/getWeather.js';
+import { setWeather, getWeather, weatherAPI } from './fetch/getWeather.js';
 import { errAlert } from './errAlert.js';
 
 //variables to display weather
@@ -83,19 +83,9 @@ const onSubmit = (e) => {
 };
 
 const getWeatherAPI = async (value) => {
-  const url =
-    'http://api.weatherstack.com/current?access_key=bd459e9c00f721c07d47a7debfbbe4ff&query=$' +
-    value;
-  const header = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-    },
-  };
-
   try {
-    const res = await fetch(url, header);
-    const { error = '', current = '', location = '' } = await res.json();
+    const res = await weatherAPI(value);
+    const { error = '', current = '', location = '' } = res;
 
     if (error) {
       errAlert(error.info, 3500);
@@ -120,7 +110,7 @@ const getWeatherAPI = async (value) => {
     city = data.city;
 
     frame.innerHTML = frame3();
-    const weatherDisplay = document.querySelector('.weather');
+
     //If mouse is entered, display turns into Change Button
     info.addEventListener('mouseenter', hover);
     info.addEventListener('mouseleave', hoverOut);
