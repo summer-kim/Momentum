@@ -21,11 +21,8 @@ export const getWeather = async () => {
   }
 };
 
-export const weatherAPI = async (value) => {
-  const url =
-    'https://api.weatherstack.com/current?access_key=bd459e9c00f721c07d47a7debfbbe4ff&query=$' +
-    value;
-
+export const getAPI = async (value) => {
+  const url = '/data/get/apiWeather/' + value;
   try {
     const res = await fetch(url);
     const data = await res.json();

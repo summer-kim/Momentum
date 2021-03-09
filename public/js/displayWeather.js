@@ -1,4 +1,4 @@
-import { setWeather, getWeather, weatherAPI } from './fetch/getWeather.js';
+import { setWeather, getWeather, getAPI } from './fetch/getWeather.js';
 import { errAlert } from './errAlert.js';
 
 //variables to display weather
@@ -84,7 +84,7 @@ const onSubmit = (e) => {
 
 const getWeatherAPI = async (value) => {
   try {
-    const res = await weatherAPI(value);
+    const res = await getAPI(value);
     const { error = '', current = '', location = '' } = res;
 
     if (error) {
