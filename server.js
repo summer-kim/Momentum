@@ -22,6 +22,9 @@ app.engine(
     partialsDir,
   })
 );
+if (process.env.NODE_ENV === 'production') {
+  app.get('view cache');
+}
 
 app.use(express.static(publicPath));
 app.use(express.json());
@@ -30,7 +33,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(authRouter.routes);
 app.use(weatherRouter.routes);
 app.use(todoRouter.routes);
-
 const checkAuth = require('./server/middleware');
 
 app.get('/', checkAuth, (req, res) => {

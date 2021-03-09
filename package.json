@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run start"
+    "heroku-postbuild": "set NODE_ENV=production && set NPM_CONFIG_PRODUCTION=false"
   },
   "repository": {
     "type": "git",
