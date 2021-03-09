@@ -1,3 +1,7 @@
 node_modules/
 config/default.json
+<<<<<<< HEAD
+=======
+functions/
+>>>>>>> b4f6cc5e81af6b6fb63deba1004b39c92c12d951
 .env

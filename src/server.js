@@ -1,4 +1,5 @@
 const express = require('express');
+const serverless = require('serverless-http');
 const app = express();
 const hbs = require('express-handlebars');
 const path = require('path');
@@ -11,6 +12,9 @@ const publicPath = path.join(__dirname, './public');
 const authRouter = require('./server/routes/authRouter');
 const weatherRouter = require('./server/routes/weatherRouter');
 const todoRouter = require('./server/routes/todoRouter');
+
+const dotenv = require('dotenv');
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 app.set('view engine', 'hbs');
 app.engine(
@@ -42,3 +46,6 @@ app.get('/', checkAuth, (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server started on Port ${PORT}`);
 });
+
+module.exports = app;
+module.exports.handler = serverless(app);
