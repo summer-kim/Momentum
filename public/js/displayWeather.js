@@ -86,9 +86,15 @@ const getWeatherAPI = async (value) => {
   const url =
     'http://api.weatherstack.com/current?access_key=bd459e9c00f721c07d47a7debfbbe4ff&query=$' +
     value;
+  const header = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+    },
+  };
 
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, header);
     const { error = '', current = '', location = '' } = await res.json();
 
     if (error) {
