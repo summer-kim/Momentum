@@ -30,15 +30,13 @@ app.use(express.static(publicPath));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(authRouter.routes);
-app.use(weatherRouter.routes);
-app.use(todoRouter.routes);
 const checkAuth = require('./server/middleware');
+app.use(authRouter.routes);
+app.use('/weather', checkAuth, weatherRouter.routes);
+app.use('/todo', checkAuth, todoRouter.routes);
 
-app.get('/', checkAuth, (req, res) => {
-  res.render('index', {
-    userName: req.user.displayName,
-  });
+app.get('/', (req, res) => {
+  res.render('index');
 });
 
 app.listen(PORT, () => {

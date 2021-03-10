@@ -1,11 +1,23 @@
 //middleware
-const { auth } = require('./db');
-const checkAuth = (req, res, next) => {
-  const user = auth.currentUser;
-  if (!user) {
+const admin = require('firebase-admin');
+const serviceAccount = require('../serviceAccountKey.json');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+const checkAuth = async (req, res, next) => {
+  if (!req.headers.authorization) {
+    return res.status(400).json({ errMsg: 'unauthorized' });
+  }
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const decoded = await admin.auth().verifyIdToken(token);
+
+  if (!decoded.uid) {
     return res.redirect('/login');
   }
-  req.user = user;
+  // const userRecord = await admin.auth().getUser(decoded.uid);
+  // console.log(userRecord.toJSON());
+  req.uid = decoded.uid;
   next();
 };
 
