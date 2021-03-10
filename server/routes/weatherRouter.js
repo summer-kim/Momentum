@@ -1,26 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const { auth, db } = require('../db');
+const { db } = require('../db');
 const axios = require('axios');
 
-router.get('/data/weather/:city', async (req, res) => {
-  const user = auth.currentUser;
+router.get('/setCity/:city', async (req, res) => {
   const city = req.params.city;
 
   try {
-    await db.collection(user.displayName).doc('city').set({ city });
+    await db.collection(req.uid).doc('city').set({ city });
     return res.json({ msg: 'set Weather Successfully' });
   } catch (error) {
     res.status(400).json({ errMsg: error.message });
   }
 });
 
-router.get('/data/get/weather', async (req, res) => {
-  const user = auth.currentUser;
-
+router.get('/getCity', async (req, res) => {
   try {
-    const doc = await db.collection(user.displayName).doc('city').get();
+    const doc = await db.collection(req.uid).doc('city').get();
     if (doc.exists) {
+      console.log(doc.data());
       return res.json(doc.data());
     }
   } catch (error) {
@@ -28,7 +26,7 @@ router.get('/data/get/weather', async (req, res) => {
   }
 });
 
-router.get('/data/get/apiWeather/:city', async (req, res) => {
+router.get('/getApi/:city', async (req, res) => {
   const { WEATHER_API_KEY } = process.env;
   const city = req.params.city;
   const url =

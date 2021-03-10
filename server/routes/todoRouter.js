@@ -3,7 +3,7 @@ const router = express.Router();
 const { auth, db, firebase } = require('../db');
 
 //Get initial Data when User Logged in
-router.get('/data/get/initData', async (req, res) => {
+router.get('/get/initData', async (req, res) => {
   const data = { links: {}, folders: {} };
   const user = auth.currentUser;
 
@@ -29,7 +29,7 @@ router.get('/data/get/initData', async (req, res) => {
 });
 
 //Set a new Folder or Link
-router.post('/data/folder/set', async (req, res) => {
+router.post('/folder/set', async (req, res) => {
   const user = auth.currentUser;
   const { folderName, docName } = req.body;
 
@@ -46,7 +46,7 @@ router.post('/data/folder/set', async (req, res) => {
 });
 
 //Get specific Folder
-router.get('/data/folder/get/:folderName/:docName', async (req, res) => {
+router.get('/folder/get/:folderName/:docName', async (req, res) => {
   const user = auth.currentUser;
   const folderName = req.params.folderName;
   const docName = req.params.docName;
@@ -66,7 +66,7 @@ router.get('/data/folder/get/:folderName/:docName', async (req, res) => {
 });
 
 //Add todo to specific Folder
-router.put('/data/todo/add', async (req, res) => {
+router.put('/todo/add', async (req, res) => {
   const user = auth.currentUser;
   const { folderName, todo, docName } = req.body;
   let folder = [];
@@ -94,7 +94,7 @@ router.put('/data/todo/add', async (req, res) => {
 });
 
 //delete Folder or Link
-router.get('/data/folder/delete/:folderName/:docName', async (req, res) => {
+router.get('/folder/delete/:folderName/:docName', async (req, res) => {
   const user = auth.currentUser;
   const folderName = req.params.folderName;
   const docName = req.params.docName;
@@ -113,7 +113,7 @@ router.get('/data/folder/delete/:folderName/:docName', async (req, res) => {
 });
 
 //delete todo
-router.put('/data/todo/delete', async (req, res) => {
+router.put('/todo/delete', async (req, res) => {
   const user = auth.currentUser;
   const { folderName, docName, todo } = req.body;
   let folder = [];
@@ -144,7 +144,7 @@ router.put('/data/todo/delete', async (req, res) => {
 });
 
 //change todo
-router.put('/data/todo/change', async (req, res) => {
+router.put('/todo/change', async (req, res) => {
   const user = auth.currentUser;
   const { folderName, todo } = req.body;
   let folder = [];

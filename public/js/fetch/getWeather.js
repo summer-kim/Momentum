@@ -1,8 +1,10 @@
+import { defaultHeader } from '../auth/auth.js';
+
 export const setWeather = async (city) => {
-  const url = '/data/weather/' + city;
+  const url = '/weather/setCity/' + city;
 
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, defaultHeader({}));
     const data = await res.json();
     return data;
   } catch (err) {
@@ -11,9 +13,9 @@ export const setWeather = async (city) => {
 };
 
 export const getWeather = async () => {
-  const url = '/data/get/weather/';
+  const url = '/weather/getCity';
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, defaultHeader({}));
     const data = await res.json();
     return data;
   } catch (err) {
@@ -22,9 +24,9 @@ export const getWeather = async () => {
 };
 
 export const getAPI = async (value) => {
-  const url = '/data/get/apiWeather/' + value;
+  const url = '/weather/getApi/' + value;
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, defaultHeader({}));
     const data = await res.json();
     return data;
   } catch (err) {

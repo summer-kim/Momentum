@@ -1,8 +1,10 @@
+import { defaultHeader } from '../auth/auth.js';
+
 export const getInitialData = async () => {
-  const url = `/data/get/initData`;
+  const url = `/todo/get/initData`;
 
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, defaultHeader({}));
     const data = await res.json();
     return data;
   } catch (err) {
@@ -13,7 +15,7 @@ export const getInitialData = async () => {
 
 //make new Folder or Link
 export const setFolder = async (folderName, isLink) => {
-  const url = '/data/folder/set';
+  const url = '/todo/folder/set';
   const docName = isLink ? 'links' : 'folders';
   const config = {
     method: 'POST',
@@ -24,7 +26,7 @@ export const setFolder = async (folderName, isLink) => {
   };
 
   try {
-    const res = await fetch(url, config);
+    const res = await fetch(url, defaultHeader({ options: config }));
     const data = await res.json();
     return data;
   } catch (err) {
@@ -36,10 +38,10 @@ export const setFolder = async (folderName, isLink) => {
 //Get a Folder or Link
 export const getFolder = async (folderName, isLink) => {
   const docName = isLink ? 'links' : 'folders';
-  const url = `/data/folder/get/${folderName}/${docName}`;
+  const url = `/todo/folder/get/${folderName}/${docName}`;
 
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, defaultHeader({}));
     const data = await res.json();
     return data;
   } catch (err) {
@@ -55,7 +57,7 @@ export const fetchTodo = async ({
   folderName,
   isLink = false,
 }) => {
-  const url = `/data/todo/${method}`;
+  const url = `/todo/todo/${method}`;
   const docName = isLink ? 'links' : 'folders';
   const config = {
     method: 'PUT',
@@ -66,7 +68,7 @@ export const fetchTodo = async ({
   };
 
   try {
-    const res = await fetch(url, config);
+    const res = await fetch(url, defaultHeader({ options: config }));
     const data = await res.json();
     return data;
   } catch (err) {
@@ -78,10 +80,10 @@ export const fetchTodo = async ({
 //Delete Folder or Link
 export const deleteFolder = async (folderName, isLink) => {
   const docName = isLink ? 'links' : 'folders';
-  const url = `/data/folder/delete/${folderName}/${docName}`;
+  const url = `/todo/folder/delete/${folderName}/${docName}`;
 
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, defaultHeader({}));
     const data = res.json(res);
     return data;
   } catch (err) {

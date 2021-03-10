@@ -33,7 +33,7 @@ const init = async () => {
   try {
     const cityData = await getWeather();
     if (cityData.errMsg) {
-      errAlert(data.errMsg, 3500);
+      errAlert(cityData.errMsg, 3500);
       return;
     } else if (cityData.city) {
       getWeatherAPI(cityData.city); //when User has Weather Data
