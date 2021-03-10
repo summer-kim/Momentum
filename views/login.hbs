@@ -5,13 +5,14 @@
         {{/if}}
     </h1>
     <p class="lead"><i class="fas fa-user"></i> Sign into Your Account</p>
-    <form class="login-form" action="{{link}}" method="POST">
+    <form class="login-form">
         {{#if isRegister}}
         <input
             type="name"
             placeholder="Your display Name"
             name="userName"
             required=""
+            id="userName"
         />
         {{/if}}
         <input
@@ -19,6 +20,8 @@
             placeholder="Email Address"
             name="email"
             required=""
+            id="email"
+
         />
       
         <input
@@ -26,6 +29,7 @@
             placeholder="Password"
             name="password"
             required=""
+            id="password"
         />
         {{#if isRegister}}
         <input
@@ -33,6 +37,7 @@
             placeholder="Confirm Password"
             name="password2"
             required=""
+            id="password2"
         />
         {{/if}}
         <input type="submit" class="login-btn" id="submitType" />
@@ -51,4 +56,41 @@
     let type= "{{link}}"
 
     submitType.value = type.substring(1).toUpperCase()
+</script>
+<script type="module">
+    import { errAlert } from './js/errAlert.js'
+    import { defaultHeader }from './js/auth/auth.js'
+
+    const form = document.querySelector('.login-form')
+    const isRegister = {{isRegister}}
+
+    const authHandler = async(e) =>{
+        e.preventDefault();
+        const email = form['email'].value;
+        const password = form['password'].value;
+        let userName = ''
+        let password2 =''
+        if(isRegister){
+            userName = form['userName'].value;
+            password2 = form['password2'].value;
+            if(password !== password2){
+                errAlert("Password and Confirmed doesn't matched", 4000)
+            }
+        }
+        const url = isRegister ? '/register' : '/login'
+        const config = {
+            method: 'POST',
+            body: JSON.stringify({ email, password, userName }),
+            headers: {
+            'Content-Type': 'application/json',
+            },
+        };
+        const res = await fetch(url, config)
+        const token = await res.json()
+        if(token){
+            localStorage.setItem('token', token)
+            window.location.href ='/'
+        }
+    }
+    form.addEventListener("submit", authHandler)
 </script>
