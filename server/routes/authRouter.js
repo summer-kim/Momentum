@@ -14,11 +14,8 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     await auth.signInWithEmailAndPassword(email, password);
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        return res.redirect('/');
-      }
-    });
+    const token = await auth.currentUser.getIdToken();
+    return res.json(token);
   } catch (err) {
     res.status(400).render('login', {
       err: err.message,
@@ -55,7 +52,8 @@ router.post('/register', async (req, res) => {
         await user.updateProfile({
           displayName: userName,
         });
-        return res.redirect('/');
+        const token = await auth.currentUser.getIdToken();
+        return res.json(token);
       }
     });
   } catch (err) {
