@@ -18,11 +18,22 @@
     <form class="deleteFolder dp-none">
       <button type="submit"></button>
     </form>
-    <form action="/login/logout" method="GET" class="logout">
-      <button type="submit" class="logout-btn">Logout</button>
+    <form class="logout">
+      <button type="reset" class="logout-btn">Logout</button>
     </form>
   </div>
 
 </section>
 
+<script>
+  const logoutBtn = document.querySelector('.logout-btn');
+  const logoutHandler = async() =>{
+    localStorage.removeItem('token')
+    await fetch('/login/logout')
+    window.location.assign('/login')
+    return
+  }
+  logoutBtn.addEventListener("click", logoutHandler)
+
+</script>
 <script type="module" src="./js/displayFolder.js"></script>

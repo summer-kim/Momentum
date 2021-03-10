@@ -7,7 +7,7 @@ admin.initializeApp({
 });
 const checkAuth = async (req, res, next) => {
   if (!req.headers.authorization) {
-    return res.status(400).json({ errMsg: 'unauthorized' });
+    return res.redirect('/login');
   }
   const token = req.headers.authorization.split('Bearer ')[1];
   const decoded = await admin.auth().verifyIdToken(token);
