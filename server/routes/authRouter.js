@@ -6,7 +6,7 @@ router.get('/login', (req, res) => {
   res.render('login', {
     style: 'login',
     isRegister: false,
-    link: '/login',
+    type: 'Login',
   });
 });
 
@@ -21,7 +21,7 @@ router.post('/login', async (req, res) => {
       err: err.message,
       style: 'login',
       isRegister: false,
-      link: '/login',
+      type: 'Login',
     });
   }
 });
@@ -29,7 +29,7 @@ router.post('/login', async (req, res) => {
 router.get('/login/logout', async (req, res) => {
   try {
     await auth.signOut();
-    res.redirect('/login');
+    return res.redirect('/login');
   } catch (err) {
     return res.redirect('/');
   }
@@ -39,7 +39,7 @@ router.get('/register', (req, res) => {
   res.render('login', {
     style: 'login',
     isRegister: true,
-    link: '/register',
+    type: 'Register',
   });
 });
 
@@ -61,7 +61,7 @@ router.post('/register', async (req, res) => {
       err: err.message,
       style: 'login',
       isRegister: true,
-      link: '/register',
+      type: 'Register',
     });
   }
 });

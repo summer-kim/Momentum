@@ -40,7 +40,7 @@
             id="password2"
         />
         {{/if}}
-        <input type="submit" class="login-btn" id="submitType" />
+        <input type="submit" class="login-btn" value={{type}} />
     </form>
     <p>
         {{#if isRegister}}Already have an account?
@@ -51,12 +51,6 @@
     {{else}}<a href="/register" class="large switch"> Sign Up </a>
     {{/if}}
 </section>
-<script>
-    const submitType = document.querySelector('#submitType')
-    let type= "{{link}}"
-
-    submitType.value = type.substring(1).toUpperCase()
-</script>
 <script type="module">
     import { errAlert } from './js/errAlert.js'
     import { defaultHeader }from './js/auth/auth.js'

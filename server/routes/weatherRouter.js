@@ -18,7 +18,6 @@ router.get('/getCity', async (req, res) => {
   try {
     const doc = await db.collection(req.uid).doc('city').get();
     if (doc.exists) {
-      console.log(doc.data());
       return res.json(doc.data());
     }
   } catch (error) {
