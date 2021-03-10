@@ -56,18 +56,18 @@ const init = async () => {
 //Interaction when User click "My Folders" or "My Links"
 const spreadFolder = (e) => {
   const isLink = targetIsLink(e.currentTarget);
-  const className = (isLink) => (isLink ? 'link' : 'folder');
+  const getClassName = (isLink) => (isLink ? 'link' : 'folder');
   const toggleFolder = (className) => {
     const elements = document.querySelectorAll('.' + className);
     const lists = Array.from(elements).slice(1); //except first Div = buttons to toggle
     lists.forEach((element) => element.classList.toggle('dp-none'));
   };
-  toggleFolder(className(isLink));
+  toggleFolder(getClassName(isLink));
 
   //if other unselected folder/link is open, automatically close them
-  const unSelected = document.querySelectorAll('.' + className(!isLink))[1];
-  if (!unSelected.classList.contains('dp-none')) {
-    toggleFolder(className(!isLink));
+  const unSelected = document.querySelectorAll('.' + getClassName(!isLink))[1];
+  if (unSelected && !unSelected.classList.contains('dp-none')) {
+    toggleFolder(getClassName(!isLink));
   }
 };
 

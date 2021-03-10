@@ -5,10 +5,9 @@ const { auth, db, firebase } = require('../db');
 //Get initial Data when User Logged in
 router.get('/get/initData', async (req, res) => {
   const data = { links: {}, folders: {} };
-  const user = auth.currentUser;
 
   try {
-    const docs = await db.collection(user.displayName).get();
+    const docs = await db.collection(req.uid).get();
 
     docs.forEach((doc) => {
       switch (doc.id) {
@@ -30,12 +29,11 @@ router.get('/get/initData', async (req, res) => {
 
 //Set a new Folder or Link
 router.post('/folder/set', async (req, res) => {
-  const user = auth.currentUser;
   const { folderName, docName } = req.body;
 
   try {
     await db
-      .collection(user.displayName)
+      .collection(req.uid)
       .doc(docName)
       .set({ [folderName]: [] }, { merge: true });
 
@@ -47,12 +45,11 @@ router.post('/folder/set', async (req, res) => {
 
 //Get specific Folder
 router.get('/folder/get/:folderName/:docName', async (req, res) => {
-  const user = auth.currentUser;
   const folderName = req.params.folderName;
   const docName = req.params.docName;
 
   try {
-    const doc = await db.collection(user.displayName).doc(docName).get();
+    const doc = await db.collection(req.uid).doc(docName).get();
 
     if (doc.exists) {
       const folders = doc.data();
@@ -67,12 +64,11 @@ router.get('/folder/get/:folderName/:docName', async (req, res) => {
 
 //Add todo to specific Folder
 router.put('/todo/add', async (req, res) => {
-  const user = auth.currentUser;
   const { folderName, todo, docName } = req.body;
   let folder = [];
 
   try {
-    const doc = await db.collection(user.displayName).doc(docName).get();
+    const doc = await db.collection(req.uid).doc(docName).get();
 
     if (doc.exists) {
       const folders = doc.data();
@@ -85,7 +81,7 @@ router.put('/todo/add', async (req, res) => {
     }
 
     await db
-      .collection(user.displayName)
+      .collection(req.uid)
       .doc(docName)
       .update({ [folderName]: folder });
   } catch (error) {
@@ -95,13 +91,12 @@ router.put('/todo/add', async (req, res) => {
 
 //delete Folder or Link
 router.get('/folder/delete/:folderName/:docName', async (req, res) => {
-  const user = auth.currentUser;
   const folderName = req.params.folderName;
   const docName = req.params.docName;
 
   try {
     await db
-      .collection(user.displayName)
+      .collection(req.uid)
       .doc(docName)
       .update({
         [folderName]: firebase.firestore.FieldValue.delete(),
@@ -114,12 +109,11 @@ router.get('/folder/delete/:folderName/:docName', async (req, res) => {
 
 //delete todo
 router.put('/todo/delete', async (req, res) => {
-  const user = auth.currentUser;
   const { folderName, docName, todo } = req.body;
   let folder = [];
 
   try {
-    const doc = await db.collection(user.displayName).doc(docName).get();
+    const doc = await db.collection(req.uid).doc(docName).get();
     if (doc.exists) {
       const folders = doc.data();
       folder = folders[folderName];
@@ -134,7 +128,7 @@ router.put('/todo/delete', async (req, res) => {
     }
 
     await db
-      .collection(user.displayName)
+      .collection(req.uid)
       .doc(docName)
       .update({ [folderName]: folder });
     return res.json({ msg: 'successfully deleted' });
@@ -145,12 +139,11 @@ router.put('/todo/delete', async (req, res) => {
 
 //change todo
 router.put('/todo/change', async (req, res) => {
-  const user = auth.currentUser;
   const { folderName, todo } = req.body;
   let folder = [];
 
   try {
-    const doc = await db.collection(user.displayName).doc('folders').get();
+    const doc = await db.collection(req.uid).doc('folders').get();
 
     if (doc.exists) {
       const folders = doc.data();
@@ -162,7 +155,7 @@ router.put('/todo/change', async (req, res) => {
     }
 
     await db
-      .collection(user.displayName)
+      .collection(req.uid)
       .doc('folders')
       .update({ [folderName]: folder });
     return res.json({ msg: 'successfully changed' });
