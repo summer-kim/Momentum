@@ -1,8 +1,12 @@
 const express = require('express');
 const app = express();
+const cookieParser = require('cookie-parser');
+const csrf = require('csurf');
 const hbs = require('express-handlebars');
 const path = require('path');
 const PORT = process.env.PORT || 5000;
+
+const csrfMiddleware = csrf({ cookie: true });
 
 const layoutsDir = path.join(__dirname, './views/layouts');
 const partialsDir = path.join(__dirname, './views/partials');
@@ -25,17 +29,23 @@ app.engine(
 if (process.env.NODE_ENV === 'production') {
   app.get('view cache');
 }
-
+app.use(cookieParser());
+app.use(csrfMiddleware);
 app.use(express.static(publicPath));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-const checkAuth = require('./server/middleware');
+const verifyUser = require('./server/middleware');
+app.use('/weather', verifyUser, weatherRouter.routes);
+app.use('/todo', verifyUser, todoRouter.routes);
 app.use(authRouter.routes);
-app.use('/weather', checkAuth, weatherRouter.routes);
-app.use('/todo', checkAuth, todoRouter.routes);
 
-app.get('/', (req, res) => {
+app.all('*', (req, res, next) => {
+  res.cookie('XSRF-TOKEN', req.csrfToken());
+  next();
+});
+
+app.get('/', verifyUser, (req, res) => {
   res.render('index');
 });
 

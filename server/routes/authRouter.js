@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { auth } = require('../db');
+const { auth, admin } = require('../db');
 
 router.get('/login', (req, res) => {
   res.render('login', {
@@ -12,10 +12,21 @@ router.get('/login', (req, res) => {
 
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
-    await auth.signInWithEmailAndPassword(email, password);
-    const token = await auth.currentUser.getIdToken();
-    return res.json(token);
+    const idToken = req.body.idToken.toString();
+    const expiresIn = 60 * 60 * 24 * 5 * 1000;
+    admin
+      .auth()
+      .createSessionCookie(idToken, { expiresIn })
+      .then(
+        (sessionCookie) => {
+          const options = { maxAge: expiresIn, httpOnly: true };
+          res.cookie('session', sessionCookie, options);
+          res.end(JSON.stringify({ status: 'success' }));
+        },
+        (err) => {
+          res.status(401).send('UNAUTHORIZED REQUEST!');
+        }
+      );
   } catch (err) {
     res.status(400).render('login', {
       err: err.message,
@@ -26,13 +37,9 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/login/logout', async (req, res) => {
-  try {
-    await auth.signOut();
-    return res.redirect('/login');
-  } catch (err) {
-    return res.redirect('/');
-  }
+router.get('/login/logout', (req, res) => {
+  res.clearCookie('session');
+  return res.redirect('/login');
 });
 
 router.get('/register', (req, res) => {
