@@ -1,5 +1,22 @@
 const clock = document.querySelector('.clock').childNodes[1];
 
+let innerWidth;
+let timerIsOn;
+let interval;
+
+const startInterval = () => {
+  interval = setInterval(() => getTime(), 1000);
+};
+const resizing = () => {
+  innerWidth = window.innerWidth;
+  if (innerWidth < 700 && timerIsOn) {
+    clearInterval(interval);
+    timerIsOn = false;
+  } else if (innerWidth >= 700 && !timerIsOn) {
+    startInterval();
+    timerIsOn = true;
+  }
+};
 const getTime = () => {
   const time = new Date();
   const hour = time.getHours();
@@ -10,4 +27,13 @@ const getTime = () => {
   }:${second < 10 ? '0' + second : second}`;
 };
 
-setInterval(() => getTime(), 1000);
+window.addEventListener('resize', resizing);
+window.addEventListener('DOMContentLoaded', () => {
+  innerWidth = window.innerWidth;
+  if (innerWidth >= 700) {
+    startInterval();
+    timerIsOn = true;
+  } else {
+    timerIsOn = false;
+  }
+});
