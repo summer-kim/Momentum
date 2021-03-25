@@ -6,6 +6,12 @@ const hbs = require('express-handlebars');
 const path = require('path');
 const PORT = process.env.PORT || 5000;
 
+app.use(express.static(publicPath));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(csrfMiddleware);
+
 const csrfMiddleware = csrf({ cookie: true });
 
 const layoutsDir = path.join(__dirname, './views/layouts');
@@ -29,11 +35,6 @@ app.engine(
 if (process.env.NODE_ENV === 'production') {
   app.get('view cache');
 }
-app.use(cookieParser());
-app.use(csrfMiddleware);
-app.use(express.static(publicPath));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
 const verifyUser = require('./server/middleware');
 app.use('/weather', verifyUser, weatherRouter.routes);
