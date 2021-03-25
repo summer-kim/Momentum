@@ -1,20 +1,10 @@
 <section class="login">
     <h1 class="large text-primary">
-        {{#if isRegister}}Sign Up
-        {{else}}Sign In
-        {{/if}}
+        Sign In
     </h1>
     <p class="lead"><i class="fas fa-user"></i> Sign into Your Account</p>
     <form class="login-form">
-        {{#if isRegister}}
-        <input
-            type="name"
-            placeholder="Your display Name"
-            name="userName"
-            required=""
-            id="userName"
-        />
-        {{/if}}
+    
         <input
             type="email"
             placeholder="Email Address"
@@ -23,7 +13,6 @@
             id="email"
 
         />
-      
         <input
             type="password"
             placeholder="Password"
@@ -31,81 +20,34 @@
             required=""
             id="password"
         />
-        {{#if isRegister}}
-        <input
-            type="password"
-            placeholder="Confirm Password"
-            name="password2"
-            required=""
-            id="password2"
-        />
-        {{/if}}
-        <input type="submit" class="login-btn" value={{type}} />
+       
+        <input type="submit" class="login-btn" value='Login' />
     </form>
-    <p>
-        {{#if isRegister}}Already have an account?
-        {{else}}Don't have an account? 
-        {{/if}}
-    </p>
-    {{#if isRegister}}<a href="/login" class="large switch"> Sign In </a>
-    {{else}}<a href="/register" class="large switch"> Sign Up </a>
-    {{/if}}
+    <p>Don't have an account?</p>
+    <a href="/register" class="large switch"> Sign Up </a>
 </section>
-<script type="module">
-    import { errAlert } from './js/errAlert.js'
-
+<script>
     const form = document.querySelector('.login-form')
-    const isRegister = {{isRegister}}
 
-    const authHandler = async(e) =>{
+    const authHandler = (e) =>{
         e.preventDefault();
         const email = form['email'].value;
         const password = form['password'].value;
-        let userName = ''
-        let password2 =''
-        if(isRegister){
-            userName = form['userName'].value;
-            password2 = form['password2'].value;
-            if(password !== password2){
-                errAlert("Password and Confirmed doesn't matched", 4000)
-            }
-        }
-        const url = isRegister ? '/register' : '/login'
-        if(isRegister){
-            firebase
-            .auth()
-            .createUserWithEmailAndPassword(email, password)
-            .then(({ user }) => {
-                return user.getIdToken().then((idToken) => {
-                return fetch(url, {
-                    method: "POST",
-                    headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    "CSRF-Token": Cookies.get("XSRF-TOKEN"),
-                    },
-                    body: JSON.stringify({ idToken }),
-                });
-                });
-            })
-            .then(() => {
-                window.location.assign("/");
-            });        
-        }
+      
         firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
             .then(({ user }) => {
                 return user.getIdToken().then((idToken) => {
-                return fetch(url, {
-                    method: "POST",
-                    headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    "CSRF-Token": Cookies.get("XSRF-TOKEN"),
-                    },
-                    body: JSON.stringify({ idToken }),
-                });
+                    return fetch('/sessionLogin', {
+                        method: "POST",
+                        headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        "CSRF-Token": Cookies.get("XSRF-TOKEN"),
+                        },
+                        body: JSON.stringify({ idToken }),
+                    });
                 });
             })
             .then(() => {

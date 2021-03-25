@@ -1,0 +1,81 @@
+<section class="login">
+    <h1 class="large text-primary">
+        Sign Up
+    </h1>
+    <p class="lead"><i class="fas fa-user"></i> Sign into Your Account</p>
+    <form class="login-form">
+      
+        <input
+            type="name"
+            placeholder="Your display Name"
+            name="userName"
+            required=""
+            id="userName"
+        />
+        <input
+            type="email"
+            placeholder="Email Address"
+            name="email"
+            required=""
+            id="email"
+
+        />
+        <input
+            type="password"
+            placeholder="Password"
+            name="password"
+            required=""
+            id="password"
+        />
+        <input
+            type="password"
+            placeholder="Confirm Password"
+            name="password2"
+            required=""
+            id="password2"
+        />
+        <input type="submit" class="login-btn" value='Register' />
+
+    </form>
+    <p>Already have an account?</p>
+    <a href="/login" class="large switch"> Sign In </a>
+</section>
+<script type="module">
+    import { errAlert } from './js/errAlert.js'
+
+    const form = document.querySelector('.login-form')
+    const authHandler = async(e) =>{
+        e.preventDefault();
+        const email = form['email'].value;
+        const password = form['password'].value;
+        const userName = form['userName'].value;
+        const password2 = form['password2'].value;
+        if(password !== password2){
+            errAlert("Password and Confirmed doesn't matched", 4000)
+        }
+        firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(({ user }) => {
+                if (user) {
+                user.updateProfile({ displayName: userName });
+            }
+            return user.getIdToken().then((idToken) => {
+            return fetch('/sessionLogin', { 
+                method: "POST",
+                headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "CSRF-Token": Cookies.get("XSRF-TOKEN"),
+                },
+                body: JSON.stringify({ idToken }),
+                });
+            });
+        })
+        .then(() => {
+            window.location.assign("/");
+        });        
+        }
+                
+    form.addEventListener("submit", authHandler)
+</script>

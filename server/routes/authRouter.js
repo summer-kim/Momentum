@@ -5,8 +5,6 @@ const { admin } = require('../db');
 router.get('/login', (req, res) => {
   res.render('login', {
     style: 'login',
-    isRegister: false,
-    type: 'Login',
   });
 });
 
@@ -14,19 +12,13 @@ router.post('/sessionLogin', async (req, res) => {
   try {
     const idToken = req.body.idToken.toString();
     const expiresIn = 60 * 60 * 24 * 5 * 1000;
-    admin
+    const options = { maxAge: expiresIn, httpOnly: true };
+
+    const sessionCookie = await admin
       .auth()
-      .createSessionCookie(idToken, { expiresIn })
-      .then(
-        (sessionCookie) => {
-          const options = { maxAge: expiresIn, httpOnly: true };
-          res.cookie('session', sessionCookie, options);
-          res.end(JSON.stringify({ status: 'success' }));
-        },
-        (err) => {
-          res.status(401).send('UNAUTHORIZED REQUEST!');
-        }
-      );
+      .createSessionCookie(idToken, { expiresIn });
+    res.cookie('session', sessionCookie, options);
+    return res.redirect('/');
   } catch (err) {
     res.status(400).render('login', {
       err: err.message,
@@ -43,10 +35,8 @@ router.get('/login/logout', (req, res) => {
 });
 
 router.get('/register', (req, res) => {
-  res.render('login', {
+  res.render('register', {
     style: 'login',
-    isRegister: true,
-    type: 'Register',
   });
 });
 
