@@ -119,4 +119,8 @@ const getWeatherAPI = async (value) => {
   }
 };
 
-window.addEventListener('DOMContentLoaded', init);
+window.addEventListener('DOMContentLoaded', () => {
+  if (window.innerWidth >= 700) {
+    init();
+  }
+});

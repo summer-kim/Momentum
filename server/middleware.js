@@ -3,6 +3,7 @@ const { admin } = require('./db');
 
 const verifyUser = async (req, res, next) => {
   const sessionCookie = req.cookies.session || '';
+
   try {
     admin
       .auth()
@@ -13,7 +14,12 @@ const verifyUser = async (req, res, next) => {
         next();
       });
   } catch (err) {
-    res.redirect('/login');
+    res.status(400).render('login', {
+      err: err.message,
+      style: 'login',
+      isRegister: false,
+      type: 'Login',
+    });
   }
 };
 
