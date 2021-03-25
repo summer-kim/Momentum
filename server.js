@@ -46,7 +46,10 @@ app.all('*', (req, res, next) => {
 });
 
 app.get('/', verifyUser, (req, res) => {
-  res.render('index');
+  const userName = req.userName;
+  res.render('index', {
+    userName,
+  });
 });
 
 app.listen(PORT, () => {

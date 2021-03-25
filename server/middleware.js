@@ -9,6 +9,7 @@ const verifyUser = async (req, res, next) => {
       .verifySessionCookie(sessionCookie, true)
       .then((decodedClaims) => {
         req.uid = decodedClaims.uid;
+        req.userName = decodedClaims.name;
         next();
       });
   } catch (err) {
