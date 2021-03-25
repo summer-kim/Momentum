@@ -28,9 +28,15 @@
 <script>
   const logoutBtn = document.querySelector('.logout-btn');
   const logoutHandler = async() =>{
-    await fetch('/login/logout')
-    window.location.assign('/login')
-    return
+    try{
+      await firebase.auth().signOut()
+      await fetch('/login/logout')
+      return window.location.assign('/login')
+    }catch{(err) => {
+      console.log(err)
+      return window.location.assign('/login')
+      }
+    }
   }
   logoutBtn.addEventListener("click", logoutHandler)
 
