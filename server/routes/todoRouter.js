@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { auth, db, firebase } = require('../db');
+const { db, firebase } = require('../db');
 
 //Get initial Data when User Logged in
 router.get('/get/initData', async (req, res) => {

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { auth, admin } = require('../db');
+const { admin } = require('../db');
 
 router.get('/login', (req, res) => {
   res.render('login', {
@@ -10,7 +10,7 @@ router.get('/login', (req, res) => {
   });
 });
 
-router.post('/login', async (req, res) => {
+router.post('/sessionLogin', async (req, res) => {
   try {
     const idToken = req.body.idToken.toString();
     const expiresIn = 60 * 60 * 24 * 5 * 1000;
@@ -48,29 +48,6 @@ router.get('/register', (req, res) => {
     isRegister: true,
     type: 'Register',
   });
-});
-
-router.post('/register', async (req, res) => {
-  try {
-    const { email, password, userName } = req.body;
-    await auth.createUserWithEmailAndPassword(email, password);
-    auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        await user.updateProfile({
-          displayName: userName,
-        });
-        const token = await auth.currentUser.getIdToken();
-        return res.json(token);
-      }
-    });
-  } catch (err) {
-    res.status(400).render('login', {
-      err: err.message,
-      style: 'login',
-      isRegister: true,
-      type: 'Register',
-    });
-  }
 });
 
 module.exports = { routes: router };

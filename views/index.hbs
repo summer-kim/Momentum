@@ -28,7 +28,6 @@
 <script>
   const logoutBtn = document.querySelector('.logout-btn');
   const logoutHandler = async() =>{
-    localStorage.removeItem('token')
     await fetch('/login/logout')
     window.location.assign('/login')
     return
