@@ -19,7 +19,9 @@ export const setFolder = async (folderName, isLink) => {
     method: 'POST',
     body: JSON.stringify({ folderName, docName }),
     headers: {
+      Accept: 'application/json',
       'Content-Type': 'application/json',
+      'CSRF-Token': Cookies.get('XSRF-TOKEN'),
     },
   };
 
@@ -61,7 +63,9 @@ export const fetchTodo = async ({
     method: 'PUT',
     body: JSON.stringify({ todo, folderName, docName }),
     headers: {
+      Accept: 'application/json',
       'Content-Type': 'application/json',
+      'CSRF-Token': Cookies.get('XSRF-TOKEN'),
     },
   };
 
