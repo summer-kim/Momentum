@@ -18,6 +18,9 @@
 .text-primary {
   text-align: center;
 }
+.lead {
+  text-align: center;
+}
 .login .login-form {
   width: 100%;
 }
