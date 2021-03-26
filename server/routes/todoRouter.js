@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { db, firebase } = require('../db');
+const { db, admin } = require('../db');
 
 //Get initial Data when User Logged in
 router.get('/get/initData', async (req, res) => {
@@ -89,7 +89,7 @@ router.put('/todo/add', async (req, res) => {
   }
 });
 
-//delete Folder or Link
+//delete Folder
 router.get('/folder/delete/:folderName/:docName', async (req, res) => {
   const folderName = req.params.folderName;
   const docName = req.params.docName;
@@ -99,7 +99,7 @@ router.get('/folder/delete/:folderName/:docName', async (req, res) => {
       .collection(req.uid)
       .doc(docName)
       .update({
-        [folderName]: firebase.firestore.FieldValue.delete(),
+        [folderName]: admin.firestore.FieldValue.delete(),
       });
     return res.json({ msg: 'successfully deleted' });
   } catch (error) {

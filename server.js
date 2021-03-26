@@ -40,13 +40,11 @@ app.use('/todo', verifyUser, todoRouter.routes);
 app.use(authRouter.routes);
 
 app.all('*', (req, res, next) => {
-  console.log('XSRF-TOKEN');
   res.cookie('XSRF-TOKEN', req.csrfToken());
   next();
 });
 
 app.get('/', verifyUser, (req, res) => {
-  console.log('main');
   const userName = req.userName;
   res.render('index', {
     userName,
