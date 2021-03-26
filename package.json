@@ -4,7 +4,8 @@
   "description": "Cloning Momentum Web",
   "main": "server.js",
   "engines": {
-    "node": "14.x"
+    "node": "14.x",
+    "npm": "6.x"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -23,7 +24,6 @@
   },
   "homepage": "https://github.com/summer-kim/Momentum#readme",
   "dependencies": {
-    "axios": "^0.21.1",
     "cookie-parser": "^1.4.5",
     "csurf": "^1.11.0",
     "dotenv": "^8.2.0",

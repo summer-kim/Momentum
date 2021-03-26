@@ -3,7 +3,7 @@ const { admin } = require('./db');
 
 const verifyUser = async (req, res, next) => {
   const sessionCookie = req.cookies.session || '';
-
+  console.log('verify');
   try {
     admin
       .auth()
