@@ -6,7 +6,7 @@ const verifyUser = async (req, res, next) => {
   console.log('verify');
   if (!sessionCookie) {
     console.log('redirect');
-    return res.redirect('/');
+    return res.redirect('/login');
   }
   try {
     admin
