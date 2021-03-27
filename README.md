@@ -1,6 +1,8 @@
 <h1 align="center"> 📌<em>My Momentum</em></h1>
 <p align="center"><em>Momentum은 chrome momentum을 심화시켜 만든<br/> <strong>Todo application</strong>입니다.</em></p>
 <br/>
+<img src="https://github.com/summer-kim/Momentum/blob/main/public/image/momentumMain.png" width="825" height="375">
+<img src="https://github.com/summer-kim/Momentum/blob/main/public/image/momentumFolder.png" width="825" height="375">
 
 <h1 align="center"> 🌎<em>URL</em></h1>
 <p align="center"><em>💗 My Momentum : <a href="https://my-momentums.herokuapp.com">Link</a></em></p>
@@ -13,15 +15,17 @@
 ```
     GET METHOD와 달리, POST는 보안이 엄격한 것을 배웠습니다.
     GET을 사용해서 데이터를 불러올때는, params로 정보를 노출시켜도 되지만,
-    POST는 body를 통해 노출되지 않으며, 설정을 통해 header의 보안토큰을 요구하게 만들 수 있기 때문입니다..
+    POST는 body를 통해 노출되지 않으며, 설정을 통해 header의 보안토큰을 요구하게 만들 수 있기 때문입니다.
 ```
 
 <p align="center"><em>🧡 Cookie, Session, Token</em></p>
 
 ```
-    GET METHOD와 달리, POST는 보안이 엄격한 것을 배웠습니다.
-    GET을 사용해서 데이터를 불러올때는, params로 정보를 노출시켜도 되지만,
-    POST는 body를 통해 노출되지 않으며, 설정을 통해 header의 보안토큰을 요구하게 만들 수 있기 때문입니다..
+    client에 로그인 정보를 Cookie로 저장하고 있으면 편리하지만 보안에 취약하기 때문에,
+    server측에서 로그인 정보와 호환되는 Session Token을 만들어 client에 response를 보내고
+    client는 request를 할 때마다 이 Token을 붙여서 요청해야하는 것을 배웠습니다.
+    이 포트폴리오에서는 csrf 미들웨어와 Cookie-parser를 사용하여
+    firebase에서 제공하는 Token와 SessionID값을 관리하였습니다.
 ```
 
 <p align="center"><em>💛 Upgrade Javascript Skill</em></p>
@@ -34,12 +38,12 @@
     .splice(),.map(),Array.from(),Object.keys()등 기본적인 함수도 자유자재로 사용할 수 있게 되었습니다.
 ```
 
-<p align="center"><em>💚 NodeJS View Engine:handlebar</em></p>
+<p align="center"><em>💚 NodeJS View Engine:handlebars</em></p>
 
 ```
-    GET METHOD와 달리, POST는 보안이 엄격한 것을 배웠습니다.
-    GET을 사용해서 데이터를 불러올때는, params로 정보를 노출시켜도 되지만,
-    POST는 body를 통해 노출되지 않으며, 설정을 통해 header의 보안토큰을 요구하게 만들 수 있기 때문입니다..
+    handlebars를 사용하여 단순히 HTML로 렌더링할때보다 더 편리하게 작업할 수 있었습니다.
+    이 프로젝트를 하면서, 서버에서 받은 data를 다이렉트로 client-side에 렌더링하는법,
+    {{#if}}로 조건에 따라 렌더링하거나 partials의 경로를 설정하는 등 hbs를 익숙하게 사용할 수 있게되었습니다.
 ```
 
  <br/>
@@ -114,7 +118,3 @@ Momentum
 ```
 
 <br/>
-<h1 align="center"> 📷<em>Screenshots</em></h1>
-
-<img src="https://github.com/summer-kim/Momentum/blob/main/public/image/momentumMain.png" width="825" height="375">
-<img src="https://github.com/summer-kim/Momentum/blob/main/public/image/momentumFolder.png" width="825" height="375">
